@@ -7,35 +7,43 @@ class DrawableObject {
   imageCache = {};
   currentImage = 0;
 
-  // loadImage('img/test.png); //
-  loadImage(path) {
-    this.img = new Image(); // this.img = document.getElementById('image') <img id="image" src> //
+  /**
+   * Description: loading images
+   */ loadImage(path) {
+    this.img = new Image();
     this.img.src = path;
   }
+  /**
+   * Discription: loading image arrays
+   */ loadImages(arr) {
+    arr.forEach((path) => {
+      let img = new Image();
+      img.src = path;
+      this.imageCache[path] = img;
+    });
+  }
 
-  draw(ctx) {
+  /**
+   * Description: visualization of all objects
+   */ draw(ctx) {
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
-  
-  drawFrame(ctx) {
-    if (this instanceof Character || this instanceof Chicken) {
+
+  /**
+   * Description: hitboxes for moveable objects
+   */ drawFrame(ctx) {
+    if (
+      this instanceof Character ||
+      this instanceof Chicken ||
+      this instanceof Endboss ||
+      this instanceof ThrowableObject ||
+      this instanceof SmallChicken
+    ) {
       ctx.beginPath();
       ctx.lineWidth = "5";
       ctx.strokeStyle = "blue";
       ctx.rect(this.x, this.y, this.width, this.height);
       ctx.stroke();
     }
-  }
-
-  /**
-   *
-   * @param {Array} arr - ['img/image1.png', 'img/image2.png', ...]
-   */
-  loadImages(arr) {
-    arr.forEach((path) => {
-      let img = new Image();
-      img.src = path;
-      this.imageCache[path] = img;
-    });
   }
 }

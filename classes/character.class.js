@@ -38,8 +38,11 @@ class Character extends MovableObject {
   ];
   world;
   walking_sound = new Audio("audio/walk.mp3");
+  jumping_sound = new Audio("audio/jump.mp3");
 
-  constructor() {
+  /**
+   * Description: loading properties of character Pepe
+   */ constructor() {
     super().loadImage("img/2_character_pepe/2_walk/W-21.png");
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_DEAD);
@@ -47,9 +50,12 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_JUMPING);
     this.applyGravity();
     this.animate();
+    this.intervalShouldStop = false;
   }
 
-  animate() {
+  /**
+   * Description: gives the character Pepe direction, animation and movement
+   */ animate() {
     setInterval(() => {
       this.walking_sound.pause();
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
@@ -57,7 +63,7 @@ class Character extends MovableObject {
         this.moveRight();
         this.walking_sound.play();
       }
-      if (this.world.keyboard.LEFT && this.x > -1330) {
+      if (this.world.keyboard.LEFT && this.x > 100) {
         this.otherDirection = true;
         this.moveLeft();
         this.walking_sound.play();
@@ -65,12 +71,15 @@ class Character extends MovableObject {
 
       if (this.world.keyboard.SPACE && !this.isAboveGround()) {
         this.jump();
+        this.jumping_sound.play();
       }
 
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 
-    setInterval(() => {
+    /**
+     * Description: gives the character Pepe dead ,collisions, jumping and moving animations
+     */ this.interval = setInterval(() => {
       if (this.isDead()) {
         this.playAnimation(this.IMAGES_DEAD);
       } else if (this.isHurt()) {

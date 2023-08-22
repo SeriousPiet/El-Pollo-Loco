@@ -1,0 +1,35 @@
+Spielname: El Pollo Loco
+
+Spielkonzept:
+
+Spielziel:
+Der Spieler schlüpft in die Rolle des mutigen Pepe, der in einem einzigen Level gegen Wellen von Gegnern kämpfen muss, um Münzen zu sammeln und den großen Endboss zu besiegen.
+
+Spielmechanik:
+1. Spielersteuerung: Der Spieler kann Pepe horizontal bewegen und springen, um Gegnern auszuweichen und Hindernisse zu überwinden.
+
+2. Gegnerklassen:
+   - Normale Gegner: Diese Gegner bewegen sich auf vorhersehbaren Pfaden im Level. Der Spieler kann sie treffen, um Münzen zu sammeln.
+   - Großer Endboss: Dieser Endboss bewegt sich langsam und folgt dem Spieler. Bei Berührung verliert der Spieler Lebensenergie.
+
+3. Flaschensammeln und -werfen:
+   - Im Level gibt es Flaschen, die der Spieler sammeln kann, indem er darüber läuft.
+   - Der Spieler kann die gesammelten Flaschen als Geschosse verwenden, um Gegner zu besiegen. Das Zielen erfolgt durch Anpassen der Wurfrichtung.
+
+4. Münzen sammeln:
+   - Münzen sind im gesamten Level verstreut und können von den normalen Gegnern fallen gelassen werden, wenn diese besiegt werden.
+   - Der Spieler sammelt Münzen, um Punkte zu verdienen. Je mehr Münzen er sammelt, desto höher seine Punktzahl.
+
+5. Schwierigkeitsgrade und Upgrades:
+   - Das Spiel hat keinen Schwierigkeitsgrad oder Upgrades. Die Herausforderung steigt durch die zunehmende Anzahl von Gegnern und die Geschicklichkeit des Spielers im Umgang mit den begrenzten Flaschen.
+
+6. Einziger Level:
+   - Das Spiel besteht aus einem einzigen Level, das begrenzt lang und breit ist. Der Spieler muss sich horizontal durch den Level bewegen, um Münzen zu sammeln und Gegnern auszuweichen.
+
+Spielablauf:
+Der Spieler beginnt am Anfang des Levels und muss sich vorwärts bewegen. Dabei muss er den normalen Gegnern ausweichen oder sie mit Flaschen besiegen, um Münzen zu sammeln. Je weiter der Spieler kommt, desto herausfordernder werden die Gegner und Hindernisse.
+
+Am Ende des Levels trifft der Spieler auf den großen Endboss. Um den Endboss zu besiegen, muss der Spieler geschickt Flaschen werfen, um seine Lebensenergie zu verringern, während er den Angriffen des Endbosses ausweicht. Sobald der Endboss besiegt ist, endet das Spiel, und die erreichte Punktzahl wird dem Spieler angezeigt.
+
+Zielgruppe:
+El Pollo Loco richtet sich an Spieler, die schnelle Reaktionen und Geschicklichkeit mögen. Es bietet eine unkomplizierte Spielmechanik ohne Upgrades oder Schwierigkeitsgrade und lädt dazu ein, sich immer wieder herausfordernden Gegnern zu stellen und die beste Punktzahl zu erzielen.
