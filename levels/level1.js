@@ -1,21 +1,23 @@
-let level1;
+let level1
 const chickenList = [];
-const smallChickenList = [];
+const smallChickenList = []
+const bossList = [];
+
 function initLevel() {
-/**
- * Description: Math.floor() rounds up or down the calculated number from Math.random(),
- * an decimal number which is multiplicated with the rumber range between min and max.
- * The number obtained in this way is added to the minimum in order to move into the number range.
- * So we get any number between 1 and 10, corresponding to the resulting number of chickens in the game.
- * @param {integer} min
- * @param {integer} max
- * @returns {integer}
- */  function getRandomInt(min, max) {
+  /**
+   * Description: Math.floor() rounds up or down the calculated number from Math.random(),
+   * an decimal number which is multiplicated with the rumber range between min and max.
+   * The number obtained in this way is added to the minimum in order to move into the number range.
+   * So we get any number between 1 and 10, corresponding to the resulting number of chickens in the game.
+   * @param {integer} min
+   * @param {integer} max
+   * @returns {integer}
+   */ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  const chickenCount = getRandomInt(1, 10);
-  const smallChickenCount = getRandomInt(1, 5);
+  const chickenCount = getRandomInt(2, 10);
+  const smallChickenCount = getRandomInt(3, 5);
 
   for (let i = 0; i < chickenCount; i++) {
     const randomX = getRandomInt(0, canvas.width);
@@ -29,10 +31,13 @@ function initLevel() {
     smallChickenList.push(smallChicken);
   }
 
+  const boss = new Endboss();
+  bossList.push(boss);
+
   level1 = new Level(
     smallChickenList,
     chickenList,
-    [new Endboss()],
+    bossList,
     [new Cloud()],
     [
       new BackgroundObject("img/5_background/layers/air.png", 0),
@@ -44,17 +49,44 @@ function initLevel() {
       new BackgroundObject("img/5_background/layers/2_second_layer/2.png", 719),
       new BackgroundObject("img/5_background/layers/1_first_layer/2.png", 719),
       new BackgroundObject("img/5_background/layers/air.png", 719 * 2),
-      new BackgroundObject("img/5_background/layers/3_third_layer/1.png",719 * 2),
-      new BackgroundObject("img/5_background/layers/2_second_layer/1.png",719 * 2),
-      new BackgroundObject("img/5_background/layers/1_first_layer/1.png",719 * 2),
+      new BackgroundObject(
+        "img/5_background/layers/3_third_layer/1.png",
+        719 * 2
+      ),
+      new BackgroundObject(
+        "img/5_background/layers/2_second_layer/1.png",
+        719 * 2
+      ),
+      new BackgroundObject(
+        "img/5_background/layers/1_first_layer/1.png",
+        719 * 2
+      ),
       new BackgroundObject("img/5_background/layers/air.png", 719 * 3),
-      new BackgroundObject("img/5_background/layers/3_third_layer/2.png",719 * 3),
-      new BackgroundObject("img/5_background/layers/2_second_layer/2.png",719 * 3),
-      new BackgroundObject("img/5_background/layers/1_first_layer/2.png",719 * 3),
+      new BackgroundObject(
+        "img/5_background/layers/3_third_layer/2.png",
+        719 * 3
+      ),
+      new BackgroundObject(
+        "img/5_background/layers/2_second_layer/2.png",
+        719 * 3
+      ),
+      new BackgroundObject(
+        "img/5_background/layers/1_first_layer/2.png",
+        719 * 3
+      ),
       new BackgroundObject("img/5_background/layers/air.png", 719 * 4),
-      new BackgroundObject("img/5_background/layers/3_third_layer/1.png",719 * 4),
-      new BackgroundObject("img/5_background/layers/2_second_layer/1.png",719 * 4),
-      new BackgroundObject("img/5_background/layers/1_first_layer/1.png",719 * 4),
+      new BackgroundObject(
+        "img/5_background/layers/3_third_layer/1.png",
+        719 * 4
+      ),
+      new BackgroundObject(
+        "img/5_background/layers/2_second_layer/1.png",
+        719 * 4
+      ),
+      new BackgroundObject(
+        "img/5_background/layers/1_first_layer/1.png",
+        719 * 4
+      ),
     ]
   );
 }
@@ -66,9 +98,16 @@ function removeChicken(chickenToRemove, chickenList) {
   }
 }
 
-function removeSmallChicken(chickenToRemove, smallChickenList) {
-  const index = smallChickenList.indexOf(chickenToRemove);
+function removeSmallChicken(smallChickenToRemove, smallChickenList) {
+  const index = smallChickenList.indexOf(smallChickenToRemove);
   if (index !== -1) {
     smallChickenList.splice(index, 1);
+  }
+}
+
+function removeEndboss(endbossToRemove, bossList) {
+  const index = bossList.indexOf(endbossToRemove);
+  if (index !== -1) {
+    bossList.splice(index, 1);
   }
 }
