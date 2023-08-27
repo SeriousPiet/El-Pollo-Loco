@@ -1,8 +1,10 @@
 class SmallChicken extends MovableObject {
-  y = 390;
   height = 40;
   width = 50;
+  y = 610;
   intervalID;
+  intervalSplashID;
+  dead_sound = this.audioVolume("audio/deadChicken.mp3", 0.005);
 
   IMAGES_WALKING = [
     "img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
@@ -24,7 +26,9 @@ class SmallChicken extends MovableObject {
     this.animate();
   }
 
-  animate() {
+  /**
+   * Description: Handles animation and movement behavior for the character.
+   */ animate() {
     let moveLeftInterval = setInterval(() => {
       this.moveLeft();
       this.intervalID = moveLeftInterval;
@@ -32,6 +36,10 @@ class SmallChicken extends MovableObject {
 
     setInterval(() => {
       if (this.isDead()) {
+        if (!this.hasPlayedDeadSound) {
+          this.dead_sound.play();
+          this.hasPlayedDeadSound = true;
+        }
         this.playAnimation(this.IMAGES_DEAD);
         clearInterval(this.intervalID);
       } else {

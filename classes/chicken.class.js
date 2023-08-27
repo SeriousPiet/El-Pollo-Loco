@@ -1,8 +1,9 @@
 class Chicken extends MovableObject {
-  y = 360;
   height = 70;
   width = 80;
+  y = 580;
   intervalID;
+  dead_sound = this.audioVolume("audio/deadChicken.mp3", 0.005);
 
   IMAGES_WALKING = [
     "img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
@@ -19,12 +20,14 @@ class Chicken extends MovableObject {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_DEAD);
-    this.x = 800 + Math.random() * 2000;
+    this.x = 1279 + Math.random() * 2000;
     this.speed = 0.15 + Math.random() * 0.5;
     this.animate();
   }
 
-  animate() {
+  /**
+   * Description: Handles animation and movement behavior for the Chicken.
+   */ animate() {
     let moveLeftInterval = setInterval(() => {
       this.moveLeft();
       this.intervalID = moveLeftInterval;
@@ -32,9 +35,14 @@ class Chicken extends MovableObject {
 
     setInterval(() => {
       if (this.isDead()) {
+        if (!this.hasPlayedDeadSound) {
+          this.dead_sound.play();
+          this.hasPlayedDeadSound = true;
+        }
         this.playAnimation(this.IMAGES_DEAD);
         clearInterval(this.intervalID);
       } else {
+        this.hasPlayedDeadSound = false;
         this.playAnimation(this.IMAGES_WALKING);
       }
     }, 200);

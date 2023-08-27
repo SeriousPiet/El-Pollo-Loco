@@ -1,8 +1,9 @@
 class Endboss extends MovableObject {
   height = 400;
   width = 250;
-  y = 55;
+  y = 250;
   intervalID;
+  i=0;
 
   IMAGES_WALKING = [
     "img/4_enemie_boss_chicken/1_walk/G1.png",
@@ -15,7 +16,7 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/4_hurt/G21.png",
     "img/4_enemie_boss_chicken/4_hurt/G22.png",
     "img/4_enemie_boss_chicken/4_hurt/G23.png",
-  ]
+  ];
 
   IMAGES_DEAD = [
     "img/4_enemie_boss_chicken/5_dead/G24.png",
@@ -28,14 +29,20 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
-    this.x = 3200;
-    this.speed = 0.15 
+    this.x = 5200;
+    this.speed = 0.15;
     this.animate();
   }
 
-  animate() {
+  /**
+   * Description: Handles animation and movement behavior for the endboss.
+   */ animate() {
     let moveLeftInterval = setInterval(() => {
+      if (this.isAboveGround()) {
       this.moveLeft();
+    } else {
+      this.jump(20);
+    }
       this.intervalID = moveLeftInterval;
     }, 1000 / 60);
 
@@ -45,7 +52,7 @@ class Endboss extends MovableObject {
         clearInterval(this.intervalID);
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
-      } else {
+      } else if (this.calculateDistance() < 100) {
         this.playAnimation(this.IMAGES_WALKING);
       }
     }, 200);
