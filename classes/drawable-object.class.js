@@ -52,9 +52,6 @@ class DrawableObject {
       this instanceof SalsaBottle
     ) {
       ctx.beginPath();
-      ctx.lindeWidth = "5";
-      ctx.strokeStyle = "blue";
-      ctx.rect(this.x, this.y, this.width, this.height);
       ctx.stroke();
     }
   }

@@ -31,7 +31,7 @@ const bossList = [];
    * @param {number} chickenCount The number of Chicken objects to generate.
    * @returns {void} This function does not have a specific return value.
    */ for (let i = 0; i < chickenCount; i++) {
-    const randomX = getRandomInt(0, canvas.width);
+    const randomX = getRandomInt(1279, 3837);
     const chicken = new Chicken(randomX);
     chickenList.push(chicken);
   }
@@ -43,7 +43,7 @@ const bossList = [];
    * @param {number} smallChickenCount The number of smallChicken objects to generate.
    * @returns {void} This function does not have a specific return value.
    */ for (let i = 0; i < smallChickenCount; i++) {
-    const randomX = getRandomInt(0, canvas.width);
+    const randomX = getRandomInt(1279, 3837);
     const smallChicken = new SmallChicken(randomX);
     smallChickenList.push(smallChicken);
   }
@@ -55,8 +55,10 @@ const bossList = [];
    * @param {number} salsaBottleCount The number of salsaBottle objects to generate.
    * @returns {void} This function does not have a specific return value.
    */ for (let i = 0; i < salsaBottleCount; i++) {
-    const randomX = getRandomInt(0, canvas.width);
-    const salsaBottle = new SalsaBottle(randomX);
+    const randomX = getRandomInt(1279, 5116);
+    const imageIndex = Math.floor(Math.random() * 2);
+    console.log(imageIndex);
+    const salsaBottle = new SalsaBottle(imageIndex ,randomX);
     salsaBottleList.push(salsaBottle);
   }
 

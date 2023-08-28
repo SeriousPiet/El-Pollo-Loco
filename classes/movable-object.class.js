@@ -37,7 +37,7 @@ class MovableObject extends DrawableObject {
     if (this instanceof ThrowableObject) {
       return true;
     } else {
-      return this.y < 400;
+      return this.y + this.height < 650;
     }
   }
 
@@ -113,14 +113,5 @@ class MovableObject extends DrawableObject {
     let timePassed = new Date().getTime() - this.lastHit;
     timePassed = timePassed / 1000;
     return timePassed < 1;
-  }
-
-     /**
-   * Description: Calculates the horizontal distance between the character and the end boss.
-   * @param {Character} character - The character object.
-   * @param {Endboss} endboss - The end boss object.
-   * @returns {number} The absolute horizontal distance between the character and the end boss.
-   */ calculateDistance(character, endboss) {
-    return Math.abs(character.x - endboss.x);
   }
 }

@@ -91,16 +91,16 @@ class Character extends MovableObject {
   }
 
   /**
-   * Description: Handles animation and movement behavior for the character.
+   * Description: Handles state and motion behavior for the character.
    */ animate() {
-    this.IntervalID = setInterval(() => this.movement(), 1000 / 60);
+    this.IntervalID = setInterval(() => this.motion(), 1000 / 60);
     setInterval(() => this.status(), 150);
   }
 
   /**
-   *  Discription: Manages character movement. Pauses the walking sound and checks for available movement actions.
+   *  Discription: Manages character motion. Pauses the walking sound and checks for available movement actions.
    * If possible, the character moves right, left, or jumps. Adjusts the camera position accordingly.
-   */ movement() {
+   */ motion() {
     this.walking_sound.pause();
     if (this.canMoveRight()) {
       this.moveRight();
@@ -203,7 +203,7 @@ class Character extends MovableObject {
       this.hasPlayedDeadSound = true;
     }
     clearInterval(this.IntervalID);
-    if (this.isAboveGround()) {
+    if (this.isAboveGround(this.pepe)) {
       this.playAnimation(this.IMAGES_DEAD_ABOVE_BOTTOM);
     } else {
       this.playAnimation(this.IMAGES_DEAD);

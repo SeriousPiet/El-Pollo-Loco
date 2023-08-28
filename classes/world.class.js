@@ -11,6 +11,7 @@ class World {
   statusBar = new StatusBar();
   bottleStatusBar = new BottleStatusbar();
   endbossStatusBar = new EndbossStatusbar();
+  distanceCharToBoss;
 
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
@@ -128,7 +129,7 @@ class World {
     setInterval(() => {
       this.checkCollisions();
       this.checkThrowObjects();
-      calculateDistance(this.character, this.level.endboss[0]);
+      this.distanceCharToBoss = this.calculateDistance(this.character, this.level.endboss[0]);
     }, 100);
   }
 
@@ -201,7 +202,6 @@ class World {
    */ endbossHitPepe() {
     this.level.endboss.forEach((enemy) => {
       if (enemy.energy > 0 && this.character.isColliding(enemy)) {
-        enemy.hit(100);
         this.character.hit(20);
         this.statusBar.setPercentage(this.character.energy);
       }
