@@ -1,28 +1,28 @@
-class EndbossStatusbar extends DrawableObject {
+class CoinStatusbar extends DrawableObject {
   IMAGES = [
-    "img/7_statusbars/1_statusbar/4_statusbar_endboss/0.png",
-    "img/7_statusbars/1_statusbar/4_statusbar_endboss/20.png",
-    "img/7_statusbars/1_statusbar/4_statusbar_endboss/40.png",
-    "img/7_statusbars/1_statusbar/4_statusbar_endboss/60.png",
-    "img/7_statusbars/1_statusbar/4_statusbar_endboss/80.png",
-    "img/7_statusbars/1_statusbar/4_statusbar_endboss/100.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/0.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/20.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/40.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/60.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/80.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/100.png",
   ];
 
-  percentage = 100;
+  percentage = 0;
 
   constructor() {
     super();
     this.loadImages(this.IMAGES);
-    this.x = 1040;
-    this.y = 0;
+    this.x = 40;
+    this.y = 80;
     this.width = 200;
     this.height = 60;
-    this.setPercentage(100);
+    this.setPercentage(0);
   }
 
   /**
-   * Description: Updates the status bar animation to reflect the energy level of the endboss.
-   * This function takes a percentage value and updates the endboss's energy level accordingly.
+   * Description: Updates the status bar animation to reflect the energy level of the coin.
+   * This function takes a percentage value and updates the coin's energy level accordingly.
    * It determines the appropriate image path based on the energy percentage using the resolveImageIndex() method,
    * and then updates the image using the cached image reference.
    * @param {integer} percentage The energy level percentage.

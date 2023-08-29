@@ -27,7 +27,9 @@ class SmallChicken extends MovableObject {
   }
 
   /**
-   * Description: Handles animation and movement behavior for the character.
+   * Description: Handles animation and movement behavior for a small chicken.
+   * This function sets up intervals for animation and movement, determining whether the small chicken is walking or dead.
+   * It also plays appropriate sound effects based on the chicken's state.
    */ animate() {
     let moveLeftInterval = setInterval(() => {
       this.moveLeft();

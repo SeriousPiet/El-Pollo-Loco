@@ -34,11 +34,7 @@ class MovableObject extends DrawableObject {
    * throwable object or if it is another movable object above y=180.
    * @returns {boolean} true if the object is above the ground, false otherwise.
    */ isAboveGround() {
-    if (this instanceof ThrowableObject) {
-      return true;
-    } else {
-      return this.y + this.height < 650;
-    }
+    return this.y + this.height < 650;
   }
 
   /**

@@ -17,10 +17,19 @@ class SalsaBottle extends MovableObject {
 
   /**
    * Description: Handles animation and movement behavior for the Chicken.
+   * This function sets up an interval to continuously check the state of the chicken.
+   * If the chicken is dead, it plays a token sound once and updates the `soundAlreadyPlayed` flag.
+   * This ensures that the sound is played only once upon the chicken's death.
+   * The interval runs every 200 milliseconds to monitor the chicken's state and sound playback.
    */ behavior() {
     setInterval(() => {
       if (this.isDead()) {
-        this.token_sound.play();
+        if (!this.soundAlreadyPlayed) {
+          this.token_sound.play();
+          this.soundAlreadyPlayed = true;
+        } else {
+          this.soundAlreadyPlayed = false;
+        }
       }
     }, 200);
   }

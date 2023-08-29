@@ -2,6 +2,8 @@ let level1;
 const chickenList = [];
 const smallChickenList = [];
 const salsaBottleList = [];
+const cloudsList = [];
+const coinsList = [];
 const bossList = [];
 
 /**
@@ -23,6 +25,8 @@ const bossList = [];
   const chickenCount = getRandomInt(2, 10);
   const smallChickenCount = getRandomInt(3, 5);
   const salsaBottleCount = getRandomInt(5, 10);
+  const cloudsCount = getRandomInt(5, 10);
+  const coinsCount = getRandomInt(5, 10);
 
   /**
    * Description: Generates and initializes a specified number of Chicken objects in a loop.
@@ -48,7 +52,7 @@ const bossList = [];
     smallChickenList.push(smallChicken);
   }
 
-    /**
+  /**
    * Description: Generates and initializes a specified number of salsaBottle objects in a loop.
    * For each iteration of the loop, a new salsaBottle instance is created with a random X-coordinate
    * within the canvas width. The generated salsaBottle objects are added to the chickenList array.
@@ -57,9 +61,35 @@ const bossList = [];
    */ for (let i = 0; i < salsaBottleCount; i++) {
     const randomX = getRandomInt(1279, 5116);
     const imageIndex = Math.floor(Math.random() * 2);
-    console.log(imageIndex);
-    const salsaBottle = new SalsaBottle(imageIndex ,randomX);
+    const salsaBottle = new SalsaBottle(imageIndex, randomX);
     salsaBottleList.push(salsaBottle);
+  }
+
+  /**
+   * Description: Generates and initializes a specified number of cloud objects in a loop.
+   * For each iteration of the loop, a new cloud instance is created with a random X-coordinate
+   * within the canvas width. The generated cloud objects are added to the chickenList array.
+   * @param {number} cloudsCount The number of cloud objects to generate.
+   * @returns {void} This function does not have a specific return value.
+   */ for (let i = 0; i < cloudsCount; i++) {
+    const randomX = getRandomInt(1279, 5116);
+    const imageIndex = Math.floor(Math.random() * 2);
+    const clouds = new Cloud(imageIndex, randomX);
+    cloudsList.push(clouds);
+  }
+
+    /**
+   * Description: Generates and initializes a specified number of coin objects in a loop.
+   * For each iteration of the loop, a new coin instance is created with a random X-coordinate
+   * For each iteration of the loop, a new coin instance is created with a random Y-coordinate
+   * within the canvas width. The generated coin objects are added to the chickenList array.
+   * @param {number} coinsCount The number of coin objects to generate.
+   * @returns {void} This function does not have a specific return value.
+   */ for (let i = 0; i < coinsCount; i++) {
+    const randomX = getRandomInt(1279, 5116);
+    const randomY = getRandomInt(200, 400);
+    const coins = new Coin(randomY, randomX);
+    coinsList.push(coins);
   }
 
   const boss = new Endboss();
@@ -70,7 +100,8 @@ const bossList = [];
     chickenList,
     salsaBottleList,
     bossList,
-    [new Cloud()],
+    cloudsList,
+    coinsList,
     [
       new BackgroundObject("img/5_background/layers/air.png", 0),
       new BackgroundObject("img/5_background/layers/3_third_layer/1.png", 0),
@@ -78,7 +109,10 @@ const bossList = [];
       new BackgroundObject("img/5_background/layers/1_first_layer/1.png", 0),
       new BackgroundObject("img/5_background/layers/air.png", 1279),
       new BackgroundObject("img/5_background/layers/3_third_layer/2.png", 1279),
-      new BackgroundObject("img/5_background/layers/2_second_layer/2.png", 1279),
+      new BackgroundObject(
+        "img/5_background/layers/2_second_layer/2.png",
+        1279
+      ),
       new BackgroundObject("img/5_background/layers/1_first_layer/2.png", 1279),
       new BackgroundObject("img/5_background/layers/air.png", 1279 * 2),
       new BackgroundObject(
@@ -127,22 +161,20 @@ const bossList = [];
  * Discription: Removes a chicken from the given list of chickens.
  * @param {object} chickenToRemove The chicken object to be removed.
  * @param {Array} chickenList The array containing the list of chicken objects.
- * @returns {void} This function does not return a value.
  */ function removeChicken(chickenToRemove, chickenList) {
-  const index = chickenList.indexOf(chickenToRemove);
-  if (index !== -1) {
-    chickenList.splice(index, 1);
+  const i = chickenList.indexOf(chickenToRemove);
+  if (i !== -1) {
+    chickenList.splice(i, 1);
   }
 }
 /**
  * Discription: Removes a small chicken from the given list of small chickens.
  * @param {object} smallChickenToRemove The small chicken object to be removed.
  * @param {Array} smallChickenList The array containing the list of small chicken objects.
- * @returns {void} This function does not return a value.
  */ function removeSmallChicken(smallChickenToRemove, smallChickenList) {
-  const index = smallChickenList.indexOf(smallChickenToRemove);
-  if (index !== -1) {
-    smallChickenList.splice(index, 1);
+  const i = smallChickenList.indexOf(smallChickenToRemove);
+  if (i !== -1) {
+    smallChickenList.splice(i, 1);
   }
 }
 
@@ -150,11 +182,10 @@ const bossList = [];
  * Discription: Removes the endboss from the given list of endboss.
  * @param {object} endbossToRemove The endboss object to be removed.
  * @param {Array} bossList The array containing the list of endboss objects.
- * @returns {void} This function does not return a value.
  */ function removeEndboss(endbossToRemove, bossList) {
-  const index = bossList.indexOf(endbossToRemove);
-  if (index !== -1) {
-    bossList.splice(index, 1);
+  const i = bossList.indexOf(endbossToRemove);
+  if (i !== -1) {
+    bossList.splice(i, 1);
   }
 }
 
@@ -162,10 +193,20 @@ const bossList = [];
  * Discription: Removes bottles from the given list of bottles.
  * @param {object} salsaBottleToRemove The bottle object to be removed.
  * @param {Array} salsaBottleList The array containing the list of bottle objects.
- * @returns {void} This function does not return a value.
  */ function removeBottle(salsaBottleToRemove, salsaBottleList) {
-  const index = salsaBottleList.indexOf(salsaBottleToRemove);
-  if (index !== -1) {
-    salsaBottleList.splice(index, 1);
+  const i = salsaBottleList.indexOf(salsaBottleToRemove);
+  if (i !== -1) {
+    salsaBottleList.splice(i, 1);
+  }
+}
+
+/**
+ * Discription: Removes coin from the given list of coins.
+ * @param {object} coinToRemove The coin object to be removed.
+ * @param {Array} coinsList The array containing the list of coin objects.
+ */ function removeBottle(coinToRemove, coinsList) {
+  const i = coinsList.indexOf(coinToRemove);
+  if (i !== -1) {
+    coinsList.splice(i, 1);
   }
 }

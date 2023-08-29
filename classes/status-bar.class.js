@@ -20,15 +20,18 @@ class StatusBar extends DrawableObject {
     this.setPercentage(100);
   }
 
- /**
- * Description: Updates the status bar animation to reflect the energy level of the character.
- * This function takes a percentage value and updates the character's energy level accordingly.
- * It determines the appropriate image path based on the energy percentage using the resolveImageIndex() method,
- * and then updates the image using the cached image reference.
- * @param {integer} percentage The energy level percentage.
- * @returns {void} This function does not have a specific return value.
- */ setPercentage(percentage) {
+  /**
+   * Description: Updates the status bar animation to reflect the energy level of the character.
+   * This function takes a percentage value and updates the character's energy level accordingly.
+   * It determines the appropriate image path based on the energy percentage using the resolveImageIndex() method,
+   * and then updates the image using the cached image reference.
+   * @param {integer} percentage The energy level percentage.
+   * @returns {void} This function does not have a specific return value.
+   */ setPercentage(percentage) {
     this.percentage = percentage;
+    if (this.percentage < 0) {
+      this.percentage = 0;
+    }
     let path = this.IMAGES[this.resolveImageIndex()];
     this.img = this.imageCache[path];
   }

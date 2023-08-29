@@ -27,6 +27,9 @@ class Chicken extends MovableObject {
 
   /**
    * Description: Handles animation and movement behavior for the Chicken.
+   * This function sets up an interval to continuously move the chicken to the left.
+   * The interval runs at a rate of 60 frames per second (FPS) by updating the chicken's position.
+   * The interval is stored in the `moveLeftInterval` variable and can be cleared using the `intervalID`.
    */ animate() {
     let moveLeftInterval = setInterval(() => {
       this.moveLeft();

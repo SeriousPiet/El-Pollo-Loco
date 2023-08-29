@@ -6,10 +6,13 @@ class World {
   throwableObjects = [];
   chickenList = [];
   smallChickenList = [];
+  cloudsList = [];
+  coinsList = [];
   bossList = [];
   salsaBottleList = [];
   statusBar = new StatusBar();
   bottleStatusBar = new BottleStatusbar();
+  coinStatusBar = new CoinStatusbar();
   endbossStatusBar = new EndbossStatusbar();
   distanceCharToBoss;
 
@@ -28,9 +31,7 @@ class World {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObjects);
     this.ctx.translate(-this.camera_x, 0);
-    this.addToMap(this.statusBar);
-    this.addToMap(this.bottleStatusBar);
-    this.addToMap(this.endbossStatusBar);
+    this.addStatusBars();
     this.ctx.translate(this.camera_x, 0);
     this.addMovableObjekts();
     this.ctx.translate(-this.camera_x, 0);
@@ -48,9 +49,20 @@ class World {
     this.addObjectsToMap(this.level.smallChicken);
     this.addObjectsToMap(this.level.chicken);
     this.addObjectsToMap(this.level.salsaBottle);
+    this.addObjectsToMap(this.level.coin);
     this.addObjectsToMap(this.level.endboss);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.throwableObjects);
+  }
+
+  /**
+   * Description: Adds various statusbar objects to the game scene by rendering them on the canvas.
+   * This function includes rendering statusBar, bottleStatusBar, coinStatusBar and endbossStatusBar objects.
+   */ addStatusBars() {
+    this.addToMap(this.statusBar);
+    this.addToMap(this.bottleStatusBar);
+    this.addToMap(this.coinStatusBar);
+    this.addToMap(this.endbossStatusBar);
   }
 
   /**
@@ -129,7 +141,13 @@ class World {
     setInterval(() => {
       this.checkCollisions();
       this.checkThrowObjects();
-      this.distanceCharToBoss = this.calculateDistance(this.character, this.level.endboss[0]);
+      this.checkThrowObjectsIsDead();
+      if (this.level.endboss.length > 0) {
+        this.distanceCharToBoss = this.calculateDistance(
+          this.character,
+          this.level.endboss[0]
+        );
+      }
     }, 100);
   }
 
@@ -145,11 +163,14 @@ class World {
     this.bottleHitSmallChicken();
     this.bottleHitEndboss();
     this.pepeFindsBottle();
+    this.pepeFindsCoin();
   }
 
   /**
-   * Description
-   * @returns {any}
+   * Description: Handles the event when the main character "Pepe" finds a salsa bottle.
+   * This function iterates through the list of salsa bottles in the current game level.
+   * If Pepe's bottle status is not full and he collides with a salsa bottle, the bottle is collected,
+   * Pepe's bottle status is increased, and the salsa bottle is removed from the list.
    */ pepeFindsBottle() {
     this.level.salsaBottle.forEach((bottle) => {
       if (
@@ -165,14 +186,37 @@ class World {
   }
 
   /**
-   * Description
-   * @returns {any}
+   * Description: Handles the event when the main character "Pepe" finds a coin.
+   * This function iterates through the list of coins in the current game level.
+   * If Pepe's coin status is not full and he collides with a coin, the coin is collected,
+   * Pepe's coin status is increased, and the coin is removed from the list.
+   */ pepeFindsCoin() {
+    this.level.coin.forEach((coin) => {
+      if (
+        this.coinStatusBar.percentage < 100 &&
+        this.character.isColliding(coin)
+      ) {
+        coin.hit(100);
+        const newCoinPercentage = this.coinStatusBar.percentage + 20;
+        this.coinStatusBar.setPercentage(newCoinPercentage);
+        removeBottle(coin, coinsList);
+      }
+    });
+  }
+
+  /**
+   * Description: Handles the event when a chicken enemy hits the main character "Pepe."
+   * This function iterates through the list of chicken enemies in the current game level.
+   * If a chicken's energy is greater than 0 and it collides with Pepe, the chicken is defeated,
+   * Pepe's energy is reduced, his coin status decreases, and the chicken is removed from the list after a delay.
    */ chickenHitPepe() {
     this.level.chicken.forEach((enemy) => {
       if (enemy.energy > 0 && this.character.isColliding(enemy)) {
         enemy.hit(100);
         this.character.hit(20);
         this.statusBar.setPercentage(this.character.energy);
+        const newCoinPercentage = this.coinStatusBar.percentage - 20;
+        this.coinStatusBar.setPercentage(newCoinPercentage);
         setTimeout(() => {
           removeChicken(enemy, chickenList);
         }, 1000);
@@ -181,8 +225,10 @@ class World {
   }
 
   /**
-   * Description
-   * @returns {any}
+   * Description: Handles the event when a small chicken enemy hits the main character "Pepe."
+   * This function iterates through the list of small chicken enemies in the current game level.
+   * If a small chicken's energy is greater than 0 and it collides with Pepe, the small chicken is defeated,
+   * Pepe's energy is reduced, his coin status decreases, and the small chicken is removed from the list after a delay.
    */ smallChickenHitPepe() {
     this.level.smallChicken.forEach((enemy) => {
       if (enemy.energy > 0 && this.character.isColliding(enemy)) {
@@ -197,8 +243,10 @@ class World {
   }
 
   /**
-   * Description
-   * @returns {any}
+   * Description: Handles the event when Pepe collides with an end boss enemy.
+   * This function iterates through the list of end boss enemies in the current game level.
+   * If an end boss's energy is greater than 0 and it collides with Pepe, Pepe's energy is reduced,
+   * and his status bar percentage is updated.
    */ endbossHitPepe() {
     this.level.endboss.forEach((enemy) => {
       if (enemy.energy > 0 && this.character.isColliding(enemy)) {
@@ -209,8 +257,10 @@ class World {
   }
 
   /**
-   * Description
-   * @returns {any}
+   * Description: Handles the event when a throwable object hits a chicken enemy.
+   * This function iterates through the list of throwable objects and the list of chicken enemies in the current game level.
+   * If a throwable object collides with a chicken enemy, the chicken and the throwable object are affected.
+   * The `chickenGotHit` function is called to handle the collision.
    */ bottleHitChicken() {
     this.throwableObjects.forEach((throwableObject) => {
       this.level.chicken.forEach((chicken) => {
@@ -222,22 +272,26 @@ class World {
   }
 
   /**
-   * Description
-   * @param {any} chicken
-   * @param {any} throwableObject
-   * @returns {any}
+   * Description: Handles the collision between a chicken enemy and a throwable object.
+   * This function is triggered when a throwable object collides with a chicken enemy.
+   * It updates the chicken's and throwable object's energy levels, removes the throwable object from the list,
+   * and schedules the removal of the chicken from the game after a delay.
+   * @param {any} chicken - The chicken enemy object.
+   * @param {any} throwableObject - The throwable object that hit the chicken.
    */ chickenGotHit(chicken, throwableObject) {
     chicken.hit(100);
     throwableObject.hit(100);
-    this.removeThrowObjects(throwableObject, this.throwableObjects);
     setTimeout(() => {
+      this.removeThrowObjects(throwableObject, this.throwableObjects);
       removeChicken(chicken, chickenList);
     }, 1000);
   }
 
   /**
-   * Description
-   * @returns {any}
+   * Description: Handles the collision between a throwable object and a small chicken enemy.
+   * This function is triggered when a throwable object collides with a small chicken enemy.
+   * It calls the `SmallChickenGotHit` function to process the collision, which includes updating the small chicken's and throwable object's energy levels,
+   * removing the throwable object from the list, and scheduling the removal of the small chicken from the game after a delay.
    */ bottleHitSmallChicken() {
     this.throwableObjects.forEach((throwableObject) => {
       this.level.smallChicken.forEach((smallChicken) => {
@@ -249,22 +303,27 @@ class World {
   }
 
   /**
-   * Description
-   * @param {any} smallChicken
-   * @param {any} throwableObject
-   * @returns {any}
+   * Description: Handles the collision between a small chicken enemy and a throwable object.
+   * This function is triggered when a small chicken enemy collides with a throwable object.
+   * It updates the energy levels of both the small chicken and the throwable object after the collision,
+   * removes the throwable object from the list, and schedules the removal of the small chicken from the game after a delay.
+   * @param {any} smallChicken - The small chicken enemy object.
+   * @param {any} throwableObject - The throwable object that collided with the small chicken.
    */ SmallChickenGotHit(smallChicken, throwableObject) {
-    smallChicken.hit(100);
-    throwableObject.hit(100);
-    this.removeThrowObjects(throwableObject, this.throwableObjects);
-    setTimeout(() => {
-      removeSmallChicken(smallChicken, smallChickenList);
-    }, 1000);
+    if (throwableObject.energy > 0) {
+      smallChicken.hit(100);
+      throwableObject.hit(100);
+      setTimeout(() => {
+        this.removeThrowObjects(throwableObject, this.throwableObjects);
+        removeSmallChicken(smallChicken, smallChickenList);
+      }, 1000);
+    }
   }
 
   /**
-   * Description
-   * @returns {any}
+   * Description: Handles the collision between a throwable object and an end boss.
+   * This function is triggered when a throwable object collides with an end boss.
+   * It calls the `bossGotHit` function to process the collision and update the end boss's energy level.
    */ bottleHitEndboss() {
     this.throwableObjects.forEach((throwableObject) => {
       this.level.endboss.forEach((endboss) => {
@@ -276,15 +335,24 @@ class World {
   }
 
   /**
-   * Description
-   * @param {any} endboss
-   * @param {any} throwableObject
-   * @returns {any}
+   * Description: Handles the collision between the main character's throwable object and an end boss.
+   * This function is triggered when a throwable object thrown by the main character collides with an end boss.
+   * It calculates the damage based on the character's coin status and updates the end boss's energy level accordingly.
+   * It also updates the throwable object's energy level, the end boss's energy bar, and removes the throwable object if necessary.
+   * If the end boss's energy reaches zero, it triggers the removal of the end boss from the game world after a delay.
+   * @param {any} endboss - The end boss object that got hit.
+   * @param {any} throwableObject - The throwable object thrown by the main character.
    */ bossGotHit(endboss, throwableObject) {
-    endboss.hit(20);
-    throwableObject.hit(100);
+    if (this.coinStatusBar.percentage == 100) {
+      endboss.hit(50);
+    } else {
+      endboss.hit(20);
+    }
     this.endbossStatusBar.setPercentage(endboss.energy);
-    this.removeThrowObjects(throwableObject, this.throwableObjects);
+    throwableObject.hit(100);
+    setTimeout(() => {
+      this.removeThrowObjects(throwableObject, this.throwableObjects);
+    }, 1000);
     if (endboss.energy == 0) {
       setTimeout(() => {
         removeEndboss(endboss, bossList);
@@ -293,10 +361,17 @@ class World {
   }
 
   /**
-   * Description
-   * @returns {any}
+   * Description: Checks the conditions for throwing a throwable object and handles the throwable object creation.
+   * This function is responsible for checking whether the conditions are met for the main character to throw a throwable object.
+   * It verifies if the 'D' key is pressed, the character has enough energy, and the bottle status bar has sufficient percentage.
+   * If all conditions are met, it creates a new throwable object, updates the bottle status bar, and adds the throwable object to the list.
+   * @returns {any | void} The created throwable object if conditions are met; otherwise, undefined.
    */ checkThrowObjects() {
-    if (this.keyboard.D && this.character.energy > 0) {
+    if (
+      this.keyboard.D &&
+      this.character.energy > 0 &&
+      this.bottleStatusBar.percentage > 0
+    ) {
       let bottle = new ThrowableObject(
         this.character.x + 100,
         this.character.y + 100
@@ -308,20 +383,38 @@ class World {
     }
   }
 
+  checkThrowObjectsIsDead() {
+    const self = this;
+    this.throwableObjects.forEach((throwableObject) => {
+      if (throwableObject.energy === 0) {
+        setTimeout(() => {
+          self.removeThrowObjects(throwableObject, self.throwableObjects);
+        }, 1000);
+      }
+    });
+  }
+
   /**
-   * Description
-   * @param {any} bottleToRemove
-   * @param {any} throwableObjects
+   * Description: Removes a throwable object from the list of throwable objects.
+   * This function is responsible for removing a specific throwable object from the list of throwable objects.
+   * It takes the throwable object to be removed and the array of throwable objects as parameters,
+   * then finds the index of the object in the array and removes it using the 'splice' method.
+   * @param {any} bottleToRemove - The throwable object to be removed.
+   * @param {any[]} throwableObjects - The array of throwable objects.
    * @returns {any}
    */ removeThrowObjects(bottleToRemove, throwableObjects) {
-    const index = throwableObjects.indexOf(bottleToRemove);
-    if (index !== -1) {
-      throwableObjects.splice(index, 1);
+    const i = throwableObjects.indexOf(bottleToRemove);
+    if (i !== -1) {
+      throwableObjects.splice(i, 1);
     }
   }
 
   /**
-   * Description: Calculates the horizontal distance between the character and the end boss.
+   * Description: Calculates the absolute horizontal distance between the character and the end boss.
+   * This function calculates and returns the absolute horizontal distance between the character and the endboss.
+   * It takes two parameters: the character object and the endboss object.
+   * The distance is calculated by taking the absolute difference between the x-coordinate of the character
+   * and the x-coordinate of the end boss. This provides the distance between their horizontal positions.
    * @param {Character} character - The character object.
    * @param {Endboss} endboss - The end boss object.
    * @returns {number} The absolute horizontal distance between the character and the end boss.
@@ -330,9 +423,11 @@ class World {
   }
 
   /**
-   * Description
-   * @param {any} objects
-   * @returns {any}
+   * Description: Adds a list of objects to the game world's rendering map.
+   * This function takes an array of objects as a parameter and iterates through each object.
+   * For each object, it calls the addToMap() method to render the object on the game canvas.
+   * The function is used to efficiently render multiple objects in the game scene, such as background objects.
+   * @param {any[]} objects - An array of objects to be added to the rendering map.
    */ addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o);
@@ -340,9 +435,13 @@ class World {
   }
 
   /**
-   * Description
-   * @param {any} mo
-   * @returns {any}
+   * Description: Adds a movable object to the game world's rendering map and renders it on the canvas.
+   * This function is responsible for rendering a movable object on the game canvas. It first checks if
+   * the object's `otherDirection` property is true, and if so, it temporarily flips the object's image
+   * horizontally using the `flipImage` method. Then, it calls the `draw` and `drawFrame` methods of the
+   * object to render its current frame on the canvas. If the object's `otherDirection` property is true,
+   * it restores the object's original orientation using the `flipImageBack` method.
+   * @param {any} mo - The movable object to be added and rendered on the canvas.
    */ addToMap(mo) {
     if (mo.otherDirection) {
       this.flipImage(mo);
@@ -355,9 +454,14 @@ class World {
   }
 
   /**
-   * Description
-   * @param {any} mo
-   * @returns {any}
+   * Description: Flips the image of a movable object horizontally for rendering.
+   * This function is used to horizontally flip the image of a movable object for rendering purposes.
+   * It saves the current rendering context state, translates the context to the right edge of the object,
+   * and then applies a horizontal scaling transformation with a scale of -1, effectively flipping the image.
+   * After the image is flipped, the function updates the object's x-coordinate accordingly to maintain
+   * its position on the canvas. The flipped image is used during rendering until it is restored with
+   * the `flipImageBack` function.
+   * @param {any} mo - The movable object whose image will be flipped.
    */ flipImage(mo) {
     this.ctx.save();
     this.ctx.translate(mo.width, 0);
@@ -366,9 +470,12 @@ class World {
   }
 
   /**
-   * Description
-   * @param {any} mo
-   * @returns {any}
+   * Description: Restores the image of a movable object after it has been flipped.
+   * This function is used to restore the image of a movable object to its original orientation
+   * after it has been flipped using the `flipImage` function. It updates the object's x-coordinate
+   * to its original value and then restores the rendering context to the state before the image was flipped.
+   * This function should be used after rendering the flipped image to ensure subsequent rendering is correct.
+   * @param {any} mo - The movable object whose flipped image will be restored.
    */ flipImageBack(mo) {
     mo.x = mo.x * -1;
     this.ctx.restore();

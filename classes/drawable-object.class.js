@@ -19,7 +19,6 @@ class DrawableObject {
   /**
    * Description: Iterates through the specified array of paths to images and stores the images in the imageCache array.
    * @param {Array} arr An array of paths to images to load.
-   * @returns {Void} This method does not return a value (string).
    */ loadImages(arr) {
     arr.forEach((path) => {
       let img = new Image();
@@ -31,7 +30,6 @@ class DrawableObject {
   /**
    * Description: Displays the drawn image on the canvas.
    * @param {CanvasRenderingContext2D} ctx The 2D Canvas context on which to draw the image.
-   * @returns {Void} This method does not return a value.
    */ draw(ctx) {
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
@@ -41,7 +39,6 @@ class DrawableObject {
    * This method draws a blue border around the object if it is an
    * instance of Character, Chicken, Endboss, ThrowableObject, or SmallChicken.
    * @param {CanvasRenderingContext2D} ctx The 2D Canvas context on which to draw the image.
-   * @returns {Void} This method does not return a value.
    */ drawFrame(ctx) {
     if (
       this instanceof Character ||
@@ -49,7 +46,8 @@ class DrawableObject {
       this instanceof Endboss ||
       this instanceof ThrowableObject ||
       this instanceof SmallChicken ||
-      this instanceof SalsaBottle
+      this instanceof SalsaBottle ||
+      this instanceof Coin
     ) {
       ctx.beginPath();
       ctx.stroke();

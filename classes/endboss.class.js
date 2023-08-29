@@ -71,6 +71,8 @@ class Endboss extends MovableObject {
 
   /**
    * Description: Handles animation and movement behavior for the endboss.
+   * This function sets up intervals for animation and state updates.
+   * The `motion` function handles movement logic, while the `state` function manages different states of the endboss.
    */ animate() {
     let moveLeftInterval = setInterval(
       () => this.motion(moveLeftInterval),
@@ -79,7 +81,10 @@ class Endboss extends MovableObject {
     setInterval(() => this.state(), 100);
   }
 
-  motion(moveLeftInterval) {
+  /**
+   * Description: Handles different motion behaviors of the endboss based on its state.
+   * This function determines the endboss's actions such as jumping when enraged and following the character.
+   */ motion(moveLeftInterval) {
     if (this.isEnrage() && !this.isAboveGround()) {
       this.jump(15);
     } else if (this.isFollow()) {
@@ -88,7 +93,10 @@ class Endboss extends MovableObject {
     }
   }
 
-  state() {
+  /**
+   * Description: Updates the state of the endboss and plays the appropriate animation.
+   * This function manages the endboss's different states, such as dead, hurt, alert stages, enrage, and follow.
+   */ state() {
     if (this.isDead()) {
       this.playAnimation(this.IMAGES_DEAD);
       clearInterval(this.intervalID);
@@ -110,21 +118,32 @@ class Endboss extends MovableObject {
     }
   }
 
-  isAlert1() {
+  /**
+   * Description: Checks if the endboss is in alert stage 1.
+   * @returns {boolean} True if the endboss is in alert stage 1, false otherwise.
+   */ isAlert1() {
     return (
       this.world.distanceCharToBoss < 1280 &&
       this.world.distanceCharToBoss > 1000 &&
       !this.triggered
     );
   }
-  isAlert2() {
+
+  /**
+   * Description: Checks if the endboss is in alert stage 2.
+   * @returns {boolean} True if the endboss is in alert stage 2, false otherwise.
+   */ isAlert2() {
     return (
       this.world.distanceCharToBoss < 1000 &&
       this.world.distanceCharToBoss > 800 &&
       !this.triggered
     );
   }
-  isAlert3() {
+
+  /**
+   * Description: Checks if the endboss is in alert stage 3.
+   * @returns {boolean} True if the endboss is in alert stage 3, false otherwise.
+   */ isAlert3() {
     return (
       this.world.distanceCharToBoss < 800 &&
       this.world.distanceCharToBoss > 600 &&
@@ -132,11 +151,17 @@ class Endboss extends MovableObject {
     );
   }
 
-  isEnrage() {
+  /**
+   * Description: Checks if the endboss is in enrage mode.
+   * @returns {boolean} True if the endboss is in enrage mode, false otherwise.
+   */ isEnrage() {
     return this.world.distanceCharToBoss < 350 && this.triggered;
   }
 
-  isFollow() {
+  /**
+   * Description: Checks if the endboss is in follow mode.
+   * @returns {boolean} True if the endboss is in follow mode, false otherwise.
+   */ isFollow() {
     return this.world.distanceCharToBoss < 5116 && this.triggered;
   }
 }
