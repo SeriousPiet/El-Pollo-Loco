@@ -39,7 +39,7 @@ class ThrowableObject extends MovableObject {
     setInterval(() => {
       if (this.y >= 600 || this.isDead()) {
         if (this.isDead()) {
-          this.x = this.x;
+          this.speedY = 0;
           this.y = this.y;
           this.playAnimation(this.IMAGES_SPLASH);
         } else {

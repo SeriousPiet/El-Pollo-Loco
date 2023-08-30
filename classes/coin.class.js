@@ -2,7 +2,6 @@ class Coin extends MovableObject {
   height = 100;
   width = 100;
   y;
-  intervalID;
   token_sound = this.audioVolume("audio/coin.mp3", 0.005);
 
   IMAGES_MOTION = ["img/8_coin/coin_1.png", "img/8_coin/coin_2.png"];
@@ -23,16 +22,7 @@ class Coin extends MovableObject {
    * 200 milliseconds.
    */ animate() {
     setInterval(() => {
-      if (this.isDead()) {
-        if (!this.hasPlayedSound) {
-          this.token_sound.play();
-          this.hasPlayedDeadSound = true;
-        }
-        clearInterval(this.intervalID);
-      } else {
-        this.hasPlayedSound = false;
-        this.playAnimation(this.IMAGES_MOTION);
-      }
+      this.playAnimation(this.IMAGES_MOTION);
     }, 200);
   }
 }

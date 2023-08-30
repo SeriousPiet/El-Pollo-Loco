@@ -1,37 +1,66 @@
 body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0px;
+    margin: 0px;
 }
 
 #fullscreen {
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-image: url("img/5_background/background_website.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url("img/5_background/background_website.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
-canvas {
-  background-color: black;
-  border-radius: 20px;
-  overflow: hidden;
+#canvas {
+    background-color: black;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+#centerContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#overlay {
+    display: flex;
+    justify-content: space-around;
+}
+
+.navigation {
+    position: absolute;
+}
+
+.buttons {
+    width: 100px;
+    height: 100px;
+}
+
+.buttons:hover {
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 1280px) {
-  canvas {
-    width: 100%;
-  }
+    #canvas,
+    .backgroundOverlay {
+        width: 100%;
+    }
 }
 
 @media only screen and (max-height: 720px) {
-  canvas {
-    height: 100vh;
-  }
+    #canvas,
+    .backgroundOverlay {
+        height: 100vh;
+    }
 }

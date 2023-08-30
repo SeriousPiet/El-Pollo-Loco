@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,11 +27,29 @@
     <script src="classes/throwable-object.class.js"></script>
     <script src="js/game.js"></script>
     <title>El Pollo Loco</title>
-  </head>
-  <body onload="init()">
+</head>
+
+<body onload="init()">
     <div id="fullscreen">
-      <div id=""></div>
-      <canvas id="canvas" height="720px" width="1280px"></canvas>
+        <canvas id="canvas" height="720px" width="1280px"></canvas>
     </div>
-  </body>
+    <div id="centerContainer">
+        <div id="overlay">
+            <img class="backgroundOverlay" src="img/clearBackground.png" />
+            <div class="navigation" id="menu">
+                <button class="buttons" id="toggleFullscreen">Fullscreen</button>
+                <botton class="buttons" id="toggleClose">Close</botton>
+                <botton class="buttons" id="toggleMute">Mute</botton>
+            </div>
+            <div class="navigation" id="control">
+                <button class="buttons" id="toggleUp">UP</button>
+                <button class="buttons" id="toggleDown">DOWN</button>
+                <button class="buttons" id="toggleLeft">LEFT</button>
+                <button class="buttons" id="toggleRight">RIGHT</button>
+                <button class="buttons" id="toggleJump">JUMP</button>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

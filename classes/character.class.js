@@ -8,6 +8,7 @@ class Character extends MovableObject {
   world;
   walking_sound = this.audioVolume("audio/walk.mp3", 0.05);
   jumping_sound = this.audioVolume("audio/jump.mp3", 0.025);
+  hurt_sound = this.audioVolume("audio/hitPepe.mp3", 0.05);
   dead_sound = this.audioVolume("audio/dead.mp3", 0.025);
 
   IMAGES_WALKING = [
@@ -178,6 +179,7 @@ class Character extends MovableObject {
     } else {
       this.hasPlayedDeadSound = false;
       if (this.isHurt()) {
+        this.hurt_sound.play();
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
         this.playAnimation(this.IMAGES_JUMPING);

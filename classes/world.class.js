@@ -178,6 +178,7 @@ class World {
         this.character.isColliding(bottle)
       ) {
         bottle.hit(100);
+        bottle.bottleToken_sound.play();
         const newBottlePercentage = this.bottleStatusBar.percentage + 10;
         this.bottleStatusBar.setPercentage(newBottlePercentage);
         removeBottle(bottle, salsaBottleList);
@@ -196,7 +197,7 @@ class World {
         this.coinStatusBar.percentage < 100 &&
         this.character.isColliding(coin)
       ) {
-        coin.hit(100);
+        coin.token_sound.play();
         const newCoinPercentage = this.coinStatusBar.percentage + 20;
         this.coinStatusBar.setPercentage(newCoinPercentage);
         removeBottle(coin, coinsList);
@@ -279,12 +280,14 @@ class World {
    * @param {any} chicken - The chicken enemy object.
    * @param {any} throwableObject - The throwable object that hit the chicken.
    */ chickenGotHit(chicken, throwableObject) {
-    chicken.hit(100);
-    throwableObject.hit(100);
-    setTimeout(() => {
-      this.removeThrowObjects(throwableObject, this.throwableObjects);
-      removeChicken(chicken, chickenList);
-    }, 1000);
+    if (throwableObject.energy > 0) {
+      chicken.hit(100);
+      throwableObject.hit(100);
+      setTimeout(() => {
+        this.removeThrowObjects(throwableObject, this.throwableObjects);
+        removeChicken(chicken, chickenList);
+      }, 1000);
+    }
   }
 
   /**
@@ -343,20 +346,22 @@ class World {
    * @param {any} endboss - The end boss object that got hit.
    * @param {any} throwableObject - The throwable object thrown by the main character.
    */ bossGotHit(endboss, throwableObject) {
-    if (this.coinStatusBar.percentage == 100) {
-      endboss.hit(50);
-    } else {
-      endboss.hit(20);
-    }
-    this.endbossStatusBar.setPercentage(endboss.energy);
-    throwableObject.hit(100);
-    setTimeout(() => {
-      this.removeThrowObjects(throwableObject, this.throwableObjects);
-    }, 1000);
-    if (endboss.energy == 0) {
+    if (throwableObject.energy > 0) {
+      if (this.coinStatusBar.percentage == 100) {
+        endboss.hit(50);
+      } else {
+        endboss.hit(20);
+      }
+      this.endbossStatusBar.setPercentage(endboss.energy);
+      throwableObject.hit(100);
       setTimeout(() => {
-        removeEndboss(endboss, bossList);
+        this.removeThrowObjects(throwableObject, this.throwableObjects);
       }, 1000);
+      if (endboss.energy == 0) {
+        setTimeout(() => {
+          removeEndboss(endboss, bossList);
+        }, 1000);
+      }
     }
   }
 
@@ -383,13 +388,16 @@ class World {
     }
   }
 
-  checkThrowObjectsIsDead() {
+  /**
+   * Checks the throwable objects in the collection for energy depletion.
+   * If an object's energy reaches 0, it will be removed after a delay.
+   */ checkThrowObjectsIsDead() {
     const self = this;
     this.throwableObjects.forEach((throwableObject) => {
       if (throwableObject.energy === 0) {
         setTimeout(() => {
           self.removeThrowObjects(throwableObject, self.throwableObjects);
-        }, 1000);
+        }, 500);
       }
     });
   }
