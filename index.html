@@ -31,22 +31,40 @@
 
 <body onload="init()">
     <div id="fullscreen">
-        <canvas id="canvas" height="720px" width="1280px"></canvas>
-    </div>
-    <div id="centerContainer">
         <div id="overlay">
-            <img class="backgroundOverlay" src="img/clearBackground.png" />
-            <div class="navigation" id="menu">
-                <button class="buttons" id="toggleFullscreen">Fullscreen</button>
-                <botton class="buttons" id="toggleClose">Close</botton>
-                <botton class="buttons" id="toggleMute">Mute</botton>
-            </div>
-            <div class="navigation" id="control">
-                <button class="buttons" id="toggleUp">UP</button>
-                <button class="buttons" id="toggleDown">DOWN</button>
-                <button class="buttons" id="toggleLeft">LEFT</button>
-                <button class="buttons" id="toggleRight">RIGHT</button>
-                <button class="buttons" id="toggleJump">JUMP</button>
+            <canvas id="canvas" height="720px" width="1280px"></canvas>
+            <div id="elements">
+                <div id="ingameButtons">
+                    <div id="topButtons">
+                        <div class="button">
+                            <img class="images" src="img/mute.png" />Mute
+                        </div>
+                        <div class="button">
+                            <img class="images" src="img/fullscreen.png" />Fullscreen
+                        </div>
+                        <div class="button">
+                            <img class="images" src="img/close.png" />Close
+                        </div>
+                    </div>
+                    <div id="bottomButtons">
+                        <div class="bottomButtonsChildren">
+                            <div class="button">
+                                <img class="images" src="img/arrow-left.png" />Left
+                            </div>
+                            <div class="button">
+                                <img class="images" src="img/arrow-right.png" />Right
+                            </div>
+                        </div>
+                        <div class="bottomButtonsChildren">
+                            <div class="button">
+                                <img class="images" src="img/arrow-up.png" />Space
+                            </div>
+                            <div class="button">
+                                <img class="images" src="img/arrow-drop.png" />Drop
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
