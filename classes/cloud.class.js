@@ -2,6 +2,7 @@ class Cloud extends MovableObject {
   y = 20;
   width = 500;
   height = 250;
+  intervalID;
   IMAGES_CLOUDS = [
     "img/5_background/layers/4_clouds/1.png",
     "img/5_background/layers/4_clouds/2.png",
@@ -20,8 +21,9 @@ class Cloud extends MovableObject {
    * The interval is triggered every 1/60th of a second (approx. 60 frames per second) by invoking the `moveLeft` method.
    * As a result, the clouds appear to move smoothly across the screen from right to left.
    */ animate() {
-    setInterval(() => {
+    this.intervalID = setInterval(() => {
       this.moveLeft();
     }, 1000 / 60);
+    setStoppableInterval(this.intervalID);
   }
 }

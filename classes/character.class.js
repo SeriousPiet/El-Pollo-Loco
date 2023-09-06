@@ -3,9 +3,15 @@ class Character extends MovableObject {
   y = 400;
   speed = 10;
   i = 0;
-  IntervalID;
+  intervalID;
   hasPlayedDeadSound = false;
   world;
+  offset = {
+    top: 120,
+    bottom: 20,
+    left: 15,
+    right: 15,
+  };
   walking_sound = this.audioVolume("audio/walk.mp3", 0.05);
   jumping_sound = this.audioVolume("audio/jump.mp3", 0.025);
   hurt_sound = this.audioVolume("audio/hitPepe.mp3", 0.05);
@@ -94,14 +100,19 @@ class Character extends MovableObject {
   /**
    * Description: Handles state and motion behavior for the character.
    */ animate() {
-    this.IntervalID = setInterval(() => this.motion(), 1000 / 60);
-    setInterval(() => this.status(), 150);
+    this.intervalID = setInterval(() => this.motion(), 1000 / 60);
+    setStoppableInterval(this.intervalID);
+    this.statusIntervalID = setInterval(() => this.status(), 150);
+    setStoppableInterval(this.statusIntervalID);
   }
 
   /**
    *  Discription: Manages character motion. Pauses the walking sound and checks for available movement actions.
    * If possible, the character moves right, left, or jumps. Adjusts the camera position accordingly.
    */ motion() {
+    if (this.y > 400) {
+      this.y = 400;
+    }
     this.walking_sound.pause();
     if (this.canMoveRight()) {
       this.moveRight();
@@ -110,7 +121,7 @@ class Character extends MovableObject {
       this.moveLeft();
     }
     if (this.canJump()) {
-      this.jump();
+      this.jump(30);
     }
     this.world.camera_x = -this.x + 100;
   }
@@ -165,8 +176,8 @@ class Character extends MovableObject {
   /**
    * Description: Makes the character jump.
    * Initiates a jump with a specified height and plays the jumping sound.
-   */ jump() {
-    super.jump(30);
+   */ jump(height) {
+    super.jump(height);
     this.jumping_sound.play();
   }
 
@@ -204,7 +215,7 @@ class Character extends MovableObject {
       this.dead_sound.play();
       this.hasPlayedDeadSound = true;
     }
-    clearInterval(this.IntervalID);
+    clearInterval(this.intervalID);
     if (this.isAboveGround(this.pepe)) {
       this.playAnimation(this.IMAGES_DEAD_ABOVE_BOTTOM);
     } else {

@@ -1,7 +1,13 @@
 class SmallChicken extends MovableObject {
-  height = 40;
-  width = 50;
-  y = 610;
+  height = 60;
+  width = 70;
+  y = 590;
+  offset = {
+    top: 0,
+    bottom: 0,
+    left: 25,
+    right: 25,
+  };
   intervalID;
   intervalSplashID;
   dead_sound = this.audioVolume("audio/deadChicken.mp3", 0.005);
@@ -31,12 +37,12 @@ class SmallChicken extends MovableObject {
    * This function sets up intervals for animation and movement, determining whether the small chicken is walking or dead.
    * It also plays appropriate sound effects based on the chicken's state.
    */ animate() {
-    let moveLeftInterval = setInterval(() => {
+    this.intervalID = setInterval(() => {
       this.moveLeft();
-      this.intervalID = moveLeftInterval;
     }, 1000 / 60);
+    setStoppableInterval(this.intervalID);
 
-    setInterval(() => {
+    this.statusIntervalID = setInterval(() => {
       if (this.isDead()) {
         if (!this.hasPlayedDeadSound) {
           this.dead_sound.play();
@@ -48,5 +54,6 @@ class SmallChicken extends MovableObject {
         this.playAnimation(this.IMAGES_WALKING);
       }
     }, 200);
+    setStoppableInterval(this.statusIntervalID);
   }
 }

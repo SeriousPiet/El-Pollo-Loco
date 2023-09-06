@@ -2,7 +2,6 @@ class World {
   canvas;
   ctx;
   keyboard;
-  camera_x = 0;
   throwableObjects = [];
   chickenList = [];
   smallChickenList = [];
@@ -10,15 +9,22 @@ class World {
   coinsList = [];
   bossList = [];
   salsaBottleList = [];
-  statusBar = new StatusBar();
-  bottleStatusBar = new BottleStatusbar();
-  coinStatusBar = new CoinStatusbar();
-  endbossStatusBar = new EndbossStatusbar();
   distanceCharToBoss;
+  runInterval;
+  camera_x = 0;
 
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
+    this.muteImage = document.getElementById("toggleMuteImage");
+    let audioControlButton = document.getElementById("toggleMute");
+    audioControlButton.addEventListener("click", () => {
+      this.toggleBackgroundMusic();
+    });
+    let toggleCloseButton = document.getElementById("toggleClose");
+    toggleCloseButton.addEventListener("click", () => {
+      this.returnToStartScreen();
+    });
     this.startScreen();
   }
 
@@ -26,19 +32,21 @@ class World {
    * Description: Renders the game scene on the canvas, including background objects, status bar, character, and movable objects.
    * This function is called recursively using requestAnimationFrame for continuous rendering.
    */ draw() {
-    this.level = level1;
-    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-    this.ctx.translate(this.camera_x, 0);
-    this.addObjectsToMap(this.level.backgroundObjects);
-    this.ctx.translate(-this.camera_x, 0);
-    this.addStatusBars();
-    this.ctx.translate(this.camera_x, 0);
-    this.addMovableObjekts();
-    this.ctx.translate(-this.camera_x, 0);
-    let self = this;
-    requestAnimationFrame(function () {
-      self.draw();
-    });
+    if (this.isGameStarted) {
+      this.level = level1;
+      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+      this.ctx.translate(this.camera_x, 0);
+      this.addObjectsToMap(this.level.backgroundObjects);
+      this.ctx.translate(-this.camera_x, 0);
+      this.addStatusBars();
+      this.ctx.translate(this.camera_x, 0);
+      this.addMovableObjekts();
+      this.ctx.translate(-this.camera_x, 0);
+      let self = this;
+      requestAnimationFrame(function () {
+        self.draw();
+      });
+    }
   }
 
   /**
@@ -63,20 +71,6 @@ class World {
     this.addToMap(this.bottleStatusBar);
     this.addToMap(this.coinStatusBar);
     this.addToMap(this.endbossStatusBar);
-  }
-
-  /**
-   * Description: Listens for a keydown event and triggers specific actions when a key is pressed.
-   * If the game has not started yet, it clears the canvas, marks the game as started,
-   * and initiates the game by calling the startGame() function.
-   */ anyKeyStartScreen() {
-    window.addEventListener("keydown", () => {
-      if (!this.isGameStarted) {
-        this.clearCanvas();
-        this.isGameStarted = true;
-        this.startGame();
-      }
-    });
   }
 
   /**
@@ -107,6 +101,20 @@ class World {
   }
 
   /**
+   * Description: Listens for a keydown event and triggers specific actions when a key is pressed.
+   * If the game has not started yet, it clears the canvas, marks the game as started,
+   * and initiates the game by calling the startGame() function.
+   */ anyKeyStartScreen() {
+    window.addEventListener("keydown", () => {
+      if (!this.isGameStarted) {
+        this.clearCanvas();
+        this.isGameStarted = true;
+        this.startGame();
+      }
+    });
+  }
+
+  /**
    * Description: Initiates the start of the game by setting up game elements and starting the gameplay loop.
    * This function initializes the game level, sets up the keyboard controls,
    * creates the main character, plays background music, starts the rendering loop,
@@ -115,6 +123,10 @@ class World {
     initLevel();
     this.keyboard = keyboard;
     this.character = new Character();
+    this.statusBar = new StatusBar();
+    this.bottleStatusBar = new BottleStatusbar();
+    this.coinStatusBar = new CoinStatusbar();
+    this.endbossStatusBar = new EndbossStatusbar();
     this.backgroundmusic_sound = this.character.audioVolume(
       "audio/music.mp3",
       0.025
@@ -123,6 +135,23 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
+  }
+
+  /**
+   * Discription: Toggles the background music between play and pause states, and updates the mute button image accordingly.
+   * This function checks the current state of the background music and toggles it between play and pause.
+   * If the music is paused, it will be played, and the mute button image will be set to "img/mute.png".
+   * If the music is currently playing, it will be paused, and the mute button image will be set to "img/volume.png".
+   */ toggleBackgroundMusic() {
+    if (this.isGameStarted) {
+      if (this.backgroundmusic_sound.paused) {
+        this.backgroundmusic_sound.play();
+        this.muteImage.src = "img/mute.png";
+      } else {
+        this.backgroundmusic_sound.pause();
+        this.muteImage.src = "img/volume.png";
+      }
+    }
   }
 
   /**
@@ -138,7 +167,7 @@ class World {
    * This function uses the setInterval method to repeatedly call the checkCollisions() and
    * checkThrowObjects() functions at a fixed interval of 100 milliseconds.
    */ run() {
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       this.checkCollisions();
       this.checkThrowObjects();
       this.checkThrowObjectsIsDead();
@@ -148,7 +177,7 @@ class World {
           this.level.endboss[0]
         );
       }
-    }, 100);
+    }, 50);
   }
 
   /**
@@ -213,14 +242,27 @@ class World {
    */ chickenHitPepe() {
     this.level.chicken.forEach((enemy) => {
       if (enemy.energy > 0 && this.character.isColliding(enemy)) {
-        enemy.hit(100);
-        this.character.hit(20);
-        this.statusBar.setPercentage(this.character.energy);
-        const newCoinPercentage = this.coinStatusBar.percentage - 20;
-        this.coinStatusBar.setPercentage(newCoinPercentage);
-        setTimeout(() => {
-          removeChicken(enemy, chickenList);
-        }, 1000);
+        if (
+          this.character.isAboveGround() &&
+          this.character.y + this.character.height > enemy.y
+        ) {
+          console.log(this.character.y + this.character.height);
+          console.log(enemy.y);
+          enemy.hit(100);
+          this.character.jump(30);
+          setTimeout(() => {
+            removeChicken(enemy, chickenList);
+          }, 1000);
+        } else {
+          enemy.hit(100);
+          this.character.hit(20);
+          this.statusBar.setPercentage(this.character.energy);
+          const newCoinPercentage = this.coinStatusBar.percentage - 20;
+          this.coinStatusBar.setPercentage(newCoinPercentage);
+          setTimeout(() => {
+            removeChicken(enemy, chickenList);
+          }, 1000);
+        }
       }
     });
   }
@@ -233,12 +275,27 @@ class World {
    */ smallChickenHitPepe() {
     this.level.smallChicken.forEach((enemy) => {
       if (enemy.energy > 0 && this.character.isColliding(enemy)) {
-        enemy.hit(100);
-        this.character.hit(20);
-        this.statusBar.setPercentage(this.character.energy);
-        setTimeout(() => {
-          removeSmallChicken(enemy, smallChickenList);
-        }, 1000);
+        console.log(this.character.y + this.character.height);
+        console.log(enemy.y);
+        console.log(this.character.isAboveGround());
+        if (
+          this.character.isAboveGround() &&
+          this.character.y + this.character.height > enemy.y
+        ) {
+          console.log("läuft");
+          enemy.hit(100);
+          this.character.jump(30);
+          setTimeout(() => {
+            removeSmallChicken(enemy, smallChickenList);
+          }, 1000);
+        } else {
+          enemy.hit(100);
+          this.character.hit(20);
+          this.statusBar.setPercentage(this.character.energy);
+          setTimeout(() => {
+            removeSmallChicken(enemy, smallChickenList);
+          }, 1000);
+        }
       }
     });
   }
@@ -370,18 +427,27 @@ class World {
    * This function is responsible for checking whether the conditions are met for the main character to throw a throwable object.
    * It verifies if the 'D' key is pressed, the character has enough energy, and the bottle status bar has sufficient percentage.
    * If all conditions are met, it creates a new throwable object, updates the bottle status bar, and adds the throwable object to the list.
-   * @returns {any | void} The created throwable object if conditions are met; otherwise, undefined.
    */ checkThrowObjects() {
+    let bottle;
     if (
       this.keyboard.D &&
       this.character.energy > 0 &&
       this.bottleStatusBar.percentage > 0
     ) {
-      let bottle = new ThrowableObject(
-        this.character.x + 100,
-        this.character.y + 100
-      );
-      this.throwableObjects.push(bottle);
+      if (!this.character.otherDirection) {
+        this.bottle = new ThrowableObject(
+          this.character.x + 50,
+          this.character.y + 100,
+          "right"
+        );
+      } else {
+        this.bottle = new ThrowableObject(
+          this.character.x,
+          this.character.y + 100,
+          "left"
+        );
+      }
+      this.throwableObjects.push(this.bottle);
       const newBottlePercentage = this.bottleStatusBar.percentage - 10;
       this.bottleStatusBar.setPercentage(newBottlePercentage);
       return bottle;
@@ -408,8 +474,7 @@ class World {
    * It takes the throwable object to be removed and the array of throwable objects as parameters,
    * then finds the index of the object in the array and removes it using the 'splice' method.
    * @param {any} bottleToRemove - The throwable object to be removed.
-   * @param {any[]} throwableObjects - The array of throwable objects.
-   * @returns {any}
+   * @param {Array[]} throwableObjects - The array of throwable objects.
    */ removeThrowObjects(bottleToRemove, throwableObjects) {
     const i = throwableObjects.indexOf(bottleToRemove);
     if (i !== -1) {
@@ -435,7 +500,7 @@ class World {
    * This function takes an array of objects as a parameter and iterates through each object.
    * For each object, it calls the addToMap() method to render the object on the game canvas.
    * The function is used to efficiently render multiple objects in the game scene, such as background objects.
-   * @param {any[]} objects - An array of objects to be added to the rendering map.
+   * @param {Array[]} objects - An array of objects to be added to the rendering map.
    */ addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o);
@@ -487,5 +552,50 @@ class World {
    */ flipImageBack(mo) {
     mo.x = mo.x * -1;
     this.ctx.restore();
+  }
+
+  /**
+   * Resets the game state and returns to the start screen if the game is currently in progress.
+   * If the game is running, it stops the game, clears various game-related data structures, and
+   * pauses any background music. Finally, it navigates the user back to the start screen.
+   */ returnToStartScreen() {
+    if (this.isGameStarted) {
+      stopGame();
+      this.character = null;
+      this.setStatusBarsNull();
+      this.deleteAllMoveableObjects();
+      if (this.backgroundmusic_sound) {
+        this.backgroundmusic_sound.pause();
+        this.backgroundmusic_sound.currentTime = 0;
+        this.muteImage.src = "img/mute.png";
+      }
+      clearInterval(this.intervalId);
+      this.startScreen();
+    }
+  }
+
+  /**
+   * Resets the game's status bars to null values.
+   * This function is used to clear the references to various status bars in the game, effectively hiding them.
+   */ setStatusBarsNull() {
+    this.statusBar = null;
+    this.bottleStatusBar = null;
+    this.coinStatusBar = null;
+    this.endbossStatusBar = null;
+  }
+
+  /**
+   * Clears all arrays containing movable objects in the game's level.
+   * This function removes all small chickens, chickens, salsa bottles, coins, end bosses,
+   * clouds, and background objects from their respective arrays within the game's level.
+   * It is typically used when resetting the game or starting a new level.
+   */ deleteAllMoveableObjects() {
+    this.level.smallChicken.splice(0, this.level.smallChicken.length);
+    this.level.chicken.splice(0, this.level.chicken.length);
+    this.level.salsaBottle.splice(0, this.level.salsaBottle.length);
+    this.level.coin.splice(0, this.level.coin.length);
+    this.level.endboss.splice(0, this.level.endboss.length);
+    this.level.clouds.splice(0, this.level.clouds.length);
+    this.level.backgroundObjects.splice(0, this.level.backgroundObjects.length);
   }
 }

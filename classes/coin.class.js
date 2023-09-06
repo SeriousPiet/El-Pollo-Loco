@@ -2,6 +2,7 @@ class Coin extends MovableObject {
   height = 100;
   width = 100;
   y;
+  intervalID;
   token_sound = this.audioVolume("audio/coin.mp3", 0.005);
 
   IMAGES_MOTION = ["img/8_coin/coin_1.png", "img/8_coin/coin_2.png"];
@@ -21,8 +22,9 @@ class Coin extends MovableObject {
    * the animation by invoking the `playAnimation` method with the appropriate images. The animation interval is set to
    * 200 milliseconds.
    */ animate() {
-    setInterval(() => {
+    this.intervalID = setInterval(() => {
       this.playAnimation(this.IMAGES_MOTION);
     }, 200);
+    setStoppableInterval(this.intervalID);
   }
 }

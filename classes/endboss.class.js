@@ -2,10 +2,17 @@ class Endboss extends MovableObject {
   height = 400;
   width = 250;
   y = 250;
+  offset = {
+    top: 60,
+    bottom: 10,
+    left: 40,
+    right: 40,
+};
   speed = 3;
-  intervalID;
   i = 0;
   triggered = false;
+  hit_sound = this.audioVolume("audio/hitEndboss.mp3", 0.01);
+  dead_sound = this.audioVolume("audio/deadChicken.mp3", 0.005);
 
   IMAGES_ALERT_STAGE_1 = [
     "img/4_enemie_boss_chicken/2_alert/G5.png",
@@ -74,34 +81,40 @@ class Endboss extends MovableObject {
    * This function sets up intervals for animation and state updates.
    * The `motion` function handles movement logic, while the `state` function manages different states of the endboss.
    */ animate() {
-    let moveLeftInterval = setInterval(
-      () => this.motion(moveLeftInterval),
+    this.intervalID = setInterval(
+      () => this.motion(),
       1000 / 60
     );
-    setInterval(() => this.state(), 100);
+    setStoppableInterval(this.intervalID);
+    this.statusIntervalID = setInterval(() => this.status(), 100);
+    setStoppableInterval(this.statusIntervalID);
   }
 
   /**
    * Description: Handles different motion behaviors of the endboss based on its state.
    * This function determines the endboss's actions such as jumping when enraged and following the character.
-   */ motion(moveLeftInterval) {
+   */ motion() {
     if (this.isEnrage() && !this.isAboveGround()) {
       this.jump(15);
     } else if (this.isFollow()) {
       this.moveLeft();
-      this.intervalID = moveLeftInterval;
     }
   }
 
   /**
    * Description: Updates the state of the endboss and plays the appropriate animation.
    * This function manages the endboss's different states, such as dead, hurt, alert stages, enrage, and follow.
-   */ state() {
+   */ status() {
     if (this.isDead()) {
       this.playAnimation(this.IMAGES_DEAD);
+      if (!this.hasPlayedDeadSound) {
+        this.dead_sound.play();
+        this.hasPlayedDeadSound = true;
+      }
       clearInterval(this.intervalID);
     } else if (this.isHurt()) {
       this.playAnimation(this.IMAGES_HURT);
+      this.hit_sound.play();
     } else if (this.isAlert1()) {
       this.playAnimation(this.IMAGES_ALERT_STAGE_1);
     } else if (this.isAlert2()) {
@@ -114,6 +127,7 @@ class Endboss extends MovableObject {
     } else if (this.isEnrage()) {
       this.playAnimation(this.IMAGES_ATTACK);
     } else if (this.isFollow()) {
+      this.hasPlayedDeadSound = false;
       this.playAnimation(this.IMAGES_WALKING);
     }
   }

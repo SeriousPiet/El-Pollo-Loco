@@ -1,8 +1,12 @@
 class Chicken extends MovableObject {
   height = 70;
-  width = 80;
   y = 580;
-  intervalID;
+  offset = {
+    top: 5,
+    bottom: 5,
+    left: 25,
+    right: 25,
+  };
   dead_sound = this.audioVolume("audio/deadChicken.mp3", 0.005);
 
   IMAGES_WALKING = [
@@ -31,12 +35,12 @@ class Chicken extends MovableObject {
    * The interval runs at a rate of 60 frames per second (FPS) by updating the chicken's position.
    * The interval is stored in the `moveLeftInterval` variable and can be cleared using the `intervalID`.
    */ animate() {
-    let moveLeftInterval = setInterval(() => {
+    this.intervalID = setInterval(() => {
       this.moveLeft();
-      this.intervalID = moveLeftInterval;
     }, 1000 / 60);
+    setStoppableInterval(this.intervalID);
 
-    setInterval(() => {
+    this.statusIntervalID = setInterval(() => {
       if (this.isDead()) {
         if (!this.hasPlayedDeadSound) {
           this.dead_sound.play();
@@ -49,5 +53,6 @@ class Chicken extends MovableObject {
         this.playAnimation(this.IMAGES_WALKING);
       }
     }, 200);
+    setStoppableInterval(this.statusIntervalID);
   }
 }

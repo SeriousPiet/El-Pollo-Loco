@@ -34,33 +34,35 @@
         <div id="overlay">
             <canvas id="canvas" height="720px" width="1280px"></canvas>
             <div id="elements">
+                <div id="startMenu"></div>
+                <div id="endScreen"></div>
                 <div id="ingameButtons">
                     <div id="topButtons">
-                        <div class="button">
-                            <img class="images" src="img/mute.png" />Mute
+                        <div class="button" id="toggleMute">
+                            <img class="images" id="toggleMuteImage" src="img/mute.png" alt="img/volume.png"/>
                         </div>
-                        <div class="button">
-                            <img class="images" src="img/fullscreen.png" />Fullscreen
+                        <div class="button" id="toggleFullscreen">
+                            <img class="images" id="toggleFullscreenImage" src="img/fullscreen.png" alt="img/fullscreen-exit.png"/>
                         </div>
-                        <div class="button">
-                            <img class="images" src="img/close.png" />Close
+                        <div class="button" id="toggleClose">
+                            <img class="images" src="img/close.png" />
                         </div>
                     </div>
                     <div id="bottomButtons">
                         <div class="bottomButtonsChildren">
-                            <div class="button">
-                                <img class="images" src="img/arrow-left.png" />Left
+                            <div class="button" id="toggleLeft">
+                                <img class="images" src="img/arrow-left.png" />
                             </div>
-                            <div class="button">
-                                <img class="images" src="img/arrow-right.png" />Right
+                            <div class="button" id="toggleRight">
+                                <img class="images" src="img/arrow-right.png" />
                             </div>
                         </div>
                         <div class="bottomButtonsChildren">
-                            <div class="button">
-                                <img class="images" src="img/arrow-up.png" />Space
+                            <div class="button" id="toggleJump">
+                                <img class="images" src="img/arrow-up.png" />
                             </div>
-                            <div class="button">
-                                <img class="images" src="img/arrow-drop.png" />Drop
+                            <div class="button" id="toggleDrop">
+                                <img class="images" src="img/arrow-drop.png" />
                             </div>
                         </div>
                     </div>
@@ -68,6 +70,7 @@
             </div>
         </div>
     </div>
+    <div id="mobileScreen"></div>
 </body>
 
 </html>

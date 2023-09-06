@@ -1,10 +1,12 @@
 let level1;
-const chickenList = [];
-const smallChickenList = [];
-const salsaBottleList = [];
-const cloudsList = [];
-const coinsList = [];
-const bossList = [];
+let chickenList = [];
+let smallChickenList = [];
+let salsaBottleList = [];
+let cloudsList = [];
+let coinsList = [];
+let bossList = [];
+let backgroundList = [];
+let arrayIndex = 0;
 
 /**
  * Description: Initializes the game level by generating Chicken and smallChicken objects,
@@ -22,7 +24,7 @@ const bossList = [];
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  const chickenCount = getRandomInt(2, 10);
+  const chickenCount = getRandomInt(5, 10);
   const smallChickenCount = getRandomInt(3, 5);
   const salsaBottleCount = getRandomInt(5, 10);
   const cloudsCount = getRandomInt(5, 10);
@@ -78,7 +80,7 @@ const bossList = [];
     cloudsList.push(clouds);
   }
 
-    /**
+  /**
    * Description: Generates and initializes a specified number of coin objects in a loop.
    * For each iteration of the loop, a new coin instance is created with a random X-coordinate
    * For each iteration of the loop, a new coin instance is created with a random Y-coordinate
@@ -92,6 +94,25 @@ const bossList = [];
     coinsList.push(coins);
   }
 
+  /**
+   * Discription: Generates a sequence of background objects based on specified conditions.
+   * This function iterates through a loop with two nested loops and creates
+   * instances of the BackgroundObject class. The loop structure ensures that
+   * background objects are created based on the values of 'i' and 'k', and the
+   * 'arrayIndex' variable is determined by whether 'i' is even or odd.
+   * @param {Array} backgroundList - An array where generated BackgroundObject instances are stored.
+   */ for (let i = 0; i < 5; i++) {
+    if (i % 2 === 0) {
+      arrayIndex = 0;
+    } else {
+      arrayIndex = 1;
+    }
+    for (let k = 0; k < 4; k++) {
+      const backgroundImage = new BackgroundObject(k, i, arrayIndex);
+      backgroundList.push(backgroundImage);
+    }
+  }
+
   const boss = new Endboss();
   bossList.push(boss);
 
@@ -102,58 +123,7 @@ const bossList = [];
     bossList,
     cloudsList,
     coinsList,
-    [
-      new BackgroundObject("img/5_background/layers/air.png", 0),
-      new BackgroundObject("img/5_background/layers/3_third_layer/1.png", 0),
-      new BackgroundObject("img/5_background/layers/2_second_layer/1.png", 0),
-      new BackgroundObject("img/5_background/layers/1_first_layer/1.png", 0),
-      new BackgroundObject("img/5_background/layers/air.png", 1279),
-      new BackgroundObject("img/5_background/layers/3_third_layer/2.png", 1279),
-      new BackgroundObject(
-        "img/5_background/layers/2_second_layer/2.png",
-        1279
-      ),
-      new BackgroundObject("img/5_background/layers/1_first_layer/2.png", 1279),
-      new BackgroundObject("img/5_background/layers/air.png", 1279 * 2),
-      new BackgroundObject(
-        "img/5_background/layers/3_third_layer/1.png",
-        1279 * 2
-      ),
-      new BackgroundObject(
-        "img/5_background/layers/2_second_layer/1.png",
-        1279 * 2
-      ),
-      new BackgroundObject(
-        "img/5_background/layers/1_first_layer/1.png",
-        1279 * 2
-      ),
-      new BackgroundObject("img/5_background/layers/air.png", 1279 * 3),
-      new BackgroundObject(
-        "img/5_background/layers/3_third_layer/2.png",
-        1279 * 3
-      ),
-      new BackgroundObject(
-        "img/5_background/layers/2_second_layer/2.png",
-        1279 * 3
-      ),
-      new BackgroundObject(
-        "img/5_background/layers/1_first_layer/2.png",
-        1279 * 3
-      ),
-      new BackgroundObject("img/5_background/layers/air.png", 1279 * 4),
-      new BackgroundObject(
-        "img/5_background/layers/3_third_layer/1.png",
-        1279 * 4
-      ),
-      new BackgroundObject(
-        "img/5_background/layers/2_second_layer/1.png",
-        1279 * 4
-      ),
-      new BackgroundObject(
-        "img/5_background/layers/1_first_layer/1.png",
-        1279 * 4
-      ),
-    ]
+    backgroundList
   );
 }
 

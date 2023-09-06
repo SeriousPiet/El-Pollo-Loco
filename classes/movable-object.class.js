@@ -4,6 +4,12 @@ class MovableObject extends DrawableObject {
   acceleration = 2.5;
   energy = 100;
   lastHit = 0;
+  offset = {
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  };
 
   /**
    * Description: Creates an audio element with the specified source and volume settings.
@@ -26,7 +32,7 @@ class MovableObject extends DrawableObject {
         this.y -= this.speedY;
         this.speedY -= this.acceleration;
       }
-    }, 1000 / 25);
+    }, 40);
   }
 
   /**
@@ -54,8 +60,8 @@ class MovableObject extends DrawableObject {
   /**
    * Description: Sets the speed in the y-direction (up) and thus enables a jump. Returns the speed as a number.
    * @returns {number} The speed in the y-direction as a number.
-   */ jump(height) {
-    this.speedY = height;
+   */ jump(jumpHeight) {
+    this.speedY = jumpHeight;
   }
 
   /**
@@ -75,10 +81,10 @@ class MovableObject extends DrawableObject {
    * @returns {boolean} true if collision occurs and conditions are met, otherwise false.
    */ isColliding(mo) {
     return (
-      this.x + this.width > mo.x &&
-      this.y + this.height > mo.y &&
-      this.x < mo.x &&
-      this.y < mo.y + mo.height
+      this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+      this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
+      this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
+      this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
     );
   }
 
