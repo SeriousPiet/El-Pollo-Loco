@@ -1,0 +1,106 @@
+@font-face {
+  font-family: "zabars";
+  src: url(../fonts/zabars.ttf) format("truetype");
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  font-family: "zabars", Arial, Helvetica, sans-serif;
+}
+
+#fullscreen {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url("../img/10_html_design/background_website.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#overlay {
+  position: relative;
+  display: flex;
+}
+
+#canvas {
+  position: relative;
+  background-color: black;
+  border-radius: 20px;
+  border-width: 0px;
+  overflow: hidden;
+  filter: blur(0px);
+}
+
+#elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  min-height: 720px;
+  min-width: 1280px;
+  max-height: 720px;
+  max-width: 1280px;
+}
+
+#endScreen {
+  display: none;
+  justify-content: center;
+  align-items: flex-end;
+  background-image: url();
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+}
+
+.endScreenChild {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 30%;
+}
+
+#startMenu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+#ingameButtons {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+.button {
+  font-size: 2vw;
+  color: black;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2vh 0 2vh 0;
+  padding: 2vh 1.5vw 2vh 1.5vw;
+  border: none;
+  cursor: pointer;
+  background-color: darkgoldenrod;
+  border-radius: 50px;
+  height: auto;
+  width: auto;
+}
+
+.text {
+  color: white;
+  text-align: center;
+  padding: 20px;
+}

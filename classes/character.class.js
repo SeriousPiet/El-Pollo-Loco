@@ -214,6 +214,7 @@ class Character extends MovableObject {
     if (!this.hasPlayedDeadSound) {
       this.dead_sound.play();
       this.hasPlayedDeadSound = true;
+      setTimeout(() => {this.world.returnToEndScreen()}, 1500);
     }
     clearInterval(this.intervalID);
     if (this.isAboveGround(this.pepe)) {

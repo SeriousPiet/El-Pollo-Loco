@@ -12,6 +12,14 @@ class World {
   distanceCharToBoss;
   runInterval;
   camera_x = 0;
+  IMAGES_DEADSCREEN = [
+    "../img/9_intro_outro_screens/game_over/oh no you lost!.png",
+    "../img/9_intro_outro_screens/game_over/you lost.png",
+  ];
+  IMAGES_WINSCREEN = [
+    "../img/9_intro_outro_screens/game_over/game over!.png",
+    "../img/9_intro_outro_screens/game_over/game over.png",
+  ];
 
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
@@ -23,6 +31,8 @@ class World {
     });
     let toggleCloseButton = document.getElementById("toggleClose");
     toggleCloseButton.addEventListener("click", () => {
+      document.getElementById("ingameButtons").style.display = "none";
+      document.getElementById("startMenu").style.display = "flex";
       this.returnToStartScreen();
     });
     this.startScreen();
@@ -95,18 +105,21 @@ class World {
         this.canvas.width,
         this.canvas.height
       );
-      this.anyKeyStartScreen();
+      this.clickStart();
     };
     this.isGameStarted = false;
+    document.getElementById("canvas").style.filter = "blur(0px)";
   }
 
   /**
    * Description: Listens for a keydown event and triggers specific actions when a key is pressed.
    * If the game has not started yet, it clears the canvas, marks the game as started,
    * and initiates the game by calling the startGame() function.
-   */ anyKeyStartScreen() {
-    window.addEventListener("keydown", () => {
+   */ clickStart() {
+    document.getElementById("toggleStart").addEventListener("click", () => {
       if (!this.isGameStarted) {
+        document.getElementById("ingameButtons").style.display = "grid";
+        document.getElementById("startMenu").style.display = "none";
         this.clearCanvas();
         this.isGameStarted = true;
         this.startGame();
@@ -146,10 +159,10 @@ class World {
     if (this.isGameStarted) {
       if (this.backgroundmusic_sound.paused) {
         this.backgroundmusic_sound.play();
-        this.muteImage.src = "img/mute.png";
+        this.muteImage.src = "img/10_html_design/mute.png";
       } else {
         this.backgroundmusic_sound.pause();
-        this.muteImage.src = "img/volume.png";
+        this.muteImage.src = "img/10_html_design/volume.png";
       }
     }
   }
@@ -246,25 +259,24 @@ class World {
           this.character.isAboveGround() &&
           this.character.y + this.character.height > enemy.y
         ) {
-          console.log(this.character.y + this.character.height);
-          console.log(enemy.y);
           enemy.hit(100);
           this.character.jump(30);
-          setTimeout(() => {
-            removeChicken(enemy, chickenList);
-          }, 1000);
+          this.removaleTimerChicken(enemy);
         } else {
-          enemy.hit(100);
-          this.character.hit(20);
-          this.statusBar.setPercentage(this.character.energy);
-          const newCoinPercentage = this.coinStatusBar.percentage - 20;
-          this.coinStatusBar.setPercentage(newCoinPercentage);
-          setTimeout(() => {
-            removeChicken(enemy, chickenList);
-          }, 1000);
+          this.hitCounter(enemy);
+          this.removaleTimerChicken(enemy);
         }
       }
     });
+  }
+
+  /**
+   * Removes a chicken from a list after a specified delay.
+   * @param {Object} enemy - The chicken enemy object to be removed.
+   */ removaleTimerChicken(enemy) {
+    setTimeout(() => {
+      removeChicken(enemy, chickenList);
+    }, 1000);
   }
 
   /**
@@ -275,29 +287,40 @@ class World {
    */ smallChickenHitPepe() {
     this.level.smallChicken.forEach((enemy) => {
       if (enemy.energy > 0 && this.character.isColliding(enemy)) {
-        console.log(this.character.y + this.character.height);
-        console.log(enemy.y);
-        console.log(this.character.isAboveGround());
         if (
           this.character.isAboveGround() &&
           this.character.y + this.character.height > enemy.y
         ) {
-          console.log("läuft");
           enemy.hit(100);
           this.character.jump(30);
-          setTimeout(() => {
-            removeSmallChicken(enemy, smallChickenList);
-          }, 1000);
+          this.removaleTimerSmallChicken(enemy);
         } else {
-          enemy.hit(100);
-          this.character.hit(20);
-          this.statusBar.setPercentage(this.character.energy);
-          setTimeout(() => {
-            removeSmallChicken(enemy, smallChickenList);
-          }, 1000);
+          this.hitCounter(enemy);
+          this.removaleTimerSmallChicken(enemy);
         }
       }
     });
+  }
+
+  /**
+   * Removes a small chicken from a list after a specified delay.
+   * @param {Object} enemy - The small chicken enemy object to be removed.
+   */ removaleTimerSmallChicken(enemy) {
+    setTimeout(() => {
+      removeSmallChicken(enemy, smallChickenList);
+    }, 1000);
+  }
+
+  /**
+   * Handles a hit event, updating character and enemy health, as well as status bars.
+   *
+   * @param {Object} enemy - The enemy object that received the hit.
+   */ hitCounter(enemy) {
+    const newCoinPercentage = this.coinStatusBar.percentage - 20;
+    enemy.hit(100);
+    this.character.hit(20);
+    this.statusBar.setPercentage(this.character.energy);
+    this.coinStatusBar.setPercentage(newCoinPercentage);
   }
 
   /**
@@ -564,13 +587,74 @@ class World {
       this.character = null;
       this.setStatusBarsNull();
       this.deleteAllMoveableObjects();
-      if (this.backgroundmusic_sound) {
-        this.backgroundmusic_sound.pause();
-        this.backgroundmusic_sound.currentTime = 0;
-        this.muteImage.src = "img/mute.png";
-      }
+      this.stopBackgroundMusic();
       clearInterval(this.intervalId);
       this.startScreen();
+    }
+  }
+
+  /**
+   * Returns to the end screen, stopping the game and performing necessary cleanup.
+   * This function is typically triggered when the player chooses to return to the main menu
+   * from the end screen.
+   */ returnToEndScreen() {
+    stopGame();
+    this.stopBackgroundMusic();
+    this.settingsEndScreen();
+    clearInterval(this.intervalId);
+    document
+      .getElementById("backToMainMenuEndScreen")
+      .addEventListener("click", () => {
+        this.startScreen();
+        document.getElementById("startMenu").style.display = "flex";
+        this.character = null;
+        this.setStatusBarsNull();
+        this.deleteAllMoveableObjects();
+      });
+  }
+
+  /**
+   * Displays the end screen with specified settings.
+   * This function applies a blur filter to the "canvas" element, hides the "ingameButtons," and displays the "endScreen" element as a flex container. Depending on the character's energy level, it generates either the dead screen path or the win screen path.
+   */ settingsEndScreen() {
+    document.getElementById("canvas").style.filter = "blur(5px)";
+    document.getElementById("ingameButtons").style.display = "none";
+    document.getElementById("endScreen").style.display = "flex";
+    if (this.character.energy == 0) {
+      this.generateDeadScreenPath();
+    } else {
+      this.generateWinScreenPath();
+    }
+  }
+
+  /**
+   * Generates a random background image for the dead screen and sets it as the background of the "endScreen" element.
+   * This function selects a random image from the predefined IMAGES_DEADSCREEN array, constructs a URL for the selected image, and assigns it as the background image of the "endScreen" element.
+   */ generateDeadScreenPath() {
+    let random_image = Math.floor(
+      Math.random() * this.IMAGES_DEADSCREEN.length
+    );
+    let deadScreenPath = '"' + this.IMAGES_DEADSCREEN[random_image] + '"';
+    document.getElementById("endScreen").style.backgroundImage =
+      "url(" + deadScreenPath + ")";
+  }
+
+  /**
+   * Generates a random image path from the IMAGES_WINSCREEN array and sets it as the background image of the "endScreen" element.
+   */ generateWinScreenPath() {
+    let random_image = Math.floor(Math.random() * this.IMAGES_WINSCREEN.length);
+    let deadScreenPath = '"' + this.IMAGES_WINSCREEN[random_image] + '"';
+    document.getElementById("endScreen").style.backgroundImage =
+      "url(" + deadScreenPath + ")";
+  }
+
+  /**
+   * Pauses and resets the background music if it is currently playing and updates the mute button image.
+   */ stopBackgroundMusic() {
+    if (this.backgroundmusic_sound) {
+      this.backgroundmusic_sound.pause();
+      this.backgroundmusic_sound.currentTime = 0;
+      this.muteImage.src = "img/10_html_design/mute.png";
     }
   }
 

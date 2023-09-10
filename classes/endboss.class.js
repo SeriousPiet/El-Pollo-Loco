@@ -7,7 +7,7 @@ class Endboss extends MovableObject {
     bottom: 10,
     left: 40,
     right: 40,
-};
+  };
   speed = 3;
   i = 0;
   triggered = false;
@@ -81,10 +81,7 @@ class Endboss extends MovableObject {
    * This function sets up intervals for animation and state updates.
    * The `motion` function handles movement logic, while the `state` function manages different states of the endboss.
    */ animate() {
-    this.intervalID = setInterval(
-      () => this.motion(),
-      1000 / 60
-    );
+    this.intervalID = setInterval(() => this.motion(), 1000 / 60);
     setStoppableInterval(this.intervalID);
     this.statusIntervalID = setInterval(() => this.status(), 100);
     setStoppableInterval(this.statusIntervalID);
@@ -110,6 +107,9 @@ class Endboss extends MovableObject {
       if (!this.hasPlayedDeadSound) {
         this.dead_sound.play();
         this.hasPlayedDeadSound = true;
+        setTimeout(() => {
+          this.world.returnToEndScreen();
+        }, 1500);
       }
       clearInterval(this.intervalID);
     } else if (this.isHurt()) {

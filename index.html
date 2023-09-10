@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
+<html lang="en" translate="no">
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/startScreen.css" />
+    <link rel="stylesheet" href="styles/ingameButtons.css" />
+    <link rel="stylesheet" href="styles/media.css" />
+    <link rel="stylesheet" href="styles/mobileScreen.css" />
     <script src="classes/drawable-object.class.js"></script>
     <script src="classes/movable-object.class.js"></script>
     <script src="classes/endboss.class.js"></script>
@@ -26,51 +29,212 @@
     <script src="classes/endboss-status-bar.class.js"></script>
     <script src="classes/throwable-object.class.js"></script>
     <script src="js/game.js"></script>
+    <link
+      rel="icon"
+      href="img/10_html_design/mexican-hat.png"
+      type="image/x-icon"
+    />
     <title>El Pollo Loco</title>
-</head>
+  </head>
 
-<body onload="init()">
+  <body onload="init()">
     <div id="fullscreen">
-        <div id="overlay">
-            <canvas id="canvas" height="720px" width="1280px"></canvas>
-            <div id="elements">
-                <div id="startMenu"></div>
-                <div id="endScreen"></div>
-                <div id="ingameButtons">
-                    <div id="topButtons">
-                        <div class="button" id="toggleMute">
-                            <img class="images" id="toggleMuteImage" src="img/mute.png" alt="img/volume.png"/>
-                        </div>
-                        <div class="button" id="toggleFullscreen">
-                            <img class="images" id="toggleFullscreenImage" src="img/fullscreen.png" alt="img/fullscreen-exit.png"/>
-                        </div>
-                        <div class="button" id="toggleClose">
-                            <img class="images" src="img/close.png" />
-                        </div>
-                    </div>
-                    <div id="bottomButtons">
-                        <div class="bottomButtonsChildren">
-                            <div class="button" id="toggleLeft">
-                                <img class="images" src="img/arrow-left.png" />
-                            </div>
-                            <div class="button" id="toggleRight">
-                                <img class="images" src="img/arrow-right.png" />
-                            </div>
-                        </div>
-                        <div class="bottomButtonsChildren">
-                            <div class="button" id="toggleJump">
-                                <img class="images" src="img/arrow-up.png" />
-                            </div>
-                            <div class="button" id="toggleDrop">
-                                <img class="images" src="img/arrow-drop.png" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div id="overlay">
+        <canvas id="canvas" height="720px" width="1280px"></canvas>
+        <div class="elements" id="elements">
+          <div id="startMenu">
+            <div id="mainMenu">
+              <div class="button" id="toggleStart">Start</div>
+              <div class="button" id="toggleHelp">Tastenbelegungen</div>
+              <div class="button" id="toggleDiscription">Spielanleitung</div>
             </div>
+            <div id="helpMenu">
+              <table class="helpTable">
+                <tr>
+                  <td>
+                    <img
+                      id="tableImages"
+                      class="imageButtonsImage"
+                      src="img/10_html_design/arrow-right.png"
+                    />
+                  </td>
+                  <td>Pfeil nach rechts</td>
+                  <td>Nach rechts laufen</td>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      id="tableImages"
+                      class="imageButtonsImage"
+                      src="img/10_html_design/arrow-left.png"
+                    />
+                  </td>
+                  <td>Pfeil nach links</td>
+                  <td>Nach links laufen</td>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      id="tableImages"
+                      class="imageButtonsImage"
+                      src="img/10_html_design/arrow-up.png"
+                    />
+                  </td>
+                  <td>Leertaste</td>
+                  <td>Springen</td>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      id="tableImages"
+                      class="imageButtonsImage"
+                      src="img/10_html_design/arrow-drop.png"
+                    />
+                  </td>
+                  <td>D-Taste</td>
+                  <td>Flasche werfen</td>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      id="tableImages"
+                      class="imageButtonsImage"
+                      src="img/10_html_design/mute.png"
+                    />
+                    <img
+                      id="tableImages"
+                      class="imageButtonsImage"
+                      src="img/10_html_design/volume.png"
+                    />
+                  </td>
+                  <td>Mit Maus oder Finger anwählen</td>
+                  <td>Musik an / aus</td>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      id="tableImages"
+                      class="imageButtonsImage"
+                      src="img/10_html_design/fullscreen.png"
+                    />
+                    <img
+                      id="tableImages"
+                      class="imageButtonsImage"
+                      src="img/10_html_design/fullscreen-exit.png"
+                    />
+                  </td>
+                  <td>Mit Maus oder Finger anwählen</td>
+                  <td>Fullscreen an / aus (nur Desktop)</td>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      id="tableImages"
+                      class="imageButtonsImage"
+                      src="img/10_html_design/arrow-drop.png"
+                    />
+                  </td>
+                  <td>Mit Maus oder Finger anwählen</td>
+                  <td>Zurück ins Hauptmenü</td>
+                </tr>
+              </table>
+              <div class="button" id="backToMainMenuHelpMenu">
+                Zurück zum Hauptmenü
+              </div>
+            </div>
+            <div id="discriptionMenu">
+              <div id="discription">
+                Du schlüpfst in die Rolle des mutigen Pepe, der sich gegen
+                Hühner und Kücken behaupten muss, um Münzen zu sammeln und den
+                großen Endboss zu besiegen. Sammelst du 5 Münzen kannst du
+                Endboss schneller besiegen, aber vorsicht, die Hühner sind
+                bestrebt deine Punktzahl zu reduzieren!
+              </div>
+              <div class="button" id="backToMainMenuDiscriptionMenu">
+                Zurück zum Hauptmenü
+              </div>
+            </div>
+          </div>
+          <div id="endScreen">
+            <div class="endScreenChild">
+              <div class="button" id="backToMainMenuEndScreen">
+                Zurück zum Hauptmenü
+              </div>
+            </div>
+          </div>
+          <div id="ingameButtons">
+            <div class="topButtonsAroundContainer">
+              <div class="topButtons">
+                <div class="button" id="toggleMute">
+                  <img
+                    class="ingameButtonsImages"
+                    id="toggleMuteImage"
+                    src="img/10_html_design/mute.png"
+                    alt="img/10_html_design/volume.png"
+                  />
+                </div>
+                <div class="button" id="toggleFullscreen">
+                  <img
+                    class="ingameButtonsImages"
+                    id="toggleFullscreenImage"
+                    src="img/10_html_design/fullscreen.png"
+                    alt="img/10_html_design/fullscreen-exit.png"
+                  />
+                </div>
+                <div class="button" id="toggleClose">
+                  <img
+                    class="ingameButtonsImages"
+                    src="img/10_html_design/close.png"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="bottomButtonsAroundContainer" id="bottomButtonsAroundContainer">
+              <div class="bottomButtons">
+                <div class="bottomButtonsChildren">
+                  <div class="button" id="toggleLeft">
+                    <img
+                      class="ingameButtonsImages"
+                      src="img/10_html_design/arrow-left.png"
+                    />
+                  </div>
+                  <div class="button" id="toggleRight">
+                    <img
+                      class="ingameButtonsImages"
+                      src="img/10_html_design/arrow-right.png"
+                    />
+                  </div>
+                </div>
+                <div class="bottomButtonsChildren">
+                  <div class="button" id="toggleJump">
+                    <img
+                      class="ingameButtonsImages"
+                      src="img/10_html_design/arrow-up.png"
+                    />
+                  </div>
+                  <div class="button" id="toggleDrop">
+                    <img
+                      class="ingameButtonsImages"
+                      src="img/10_html_design/arrow-drop.png"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-    <div id="mobileScreen"></div>
-</body>
-
+    <div id="mobileScreen">
+      <div class="rotateDevice">
+        <img
+          id="rotateDeviceImage"
+          src="img/10_html_design/rotate_device.gif"
+        />
+      </div>
+      <div class="text">
+        Um El Pollo Loco genießen zu können, bitte das Gerät drehen.
+      </div>
+    </div>
+  </body>
 </html>

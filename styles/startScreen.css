@@ -1,0 +1,46 @@
+#mainMenu {
+    display: flex;
+    flex-direction: column;
+}
+
+#helpMenu {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.helpTable {
+    font-size: 2vw;
+    border: none;
+    border-radius: 20px;
+    text-align: center;
+    border-collapse: collapse;
+    background-color: beige;
+    width: 90%;
+    height: auto;
+    opacity: 0.8;
+}
+
+#tableImages {
+    height: 5vh;
+}
+
+#discriptionMenu {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+}
+
+#discription {
+    text-align: justify;
+    font-size: 2vw;
+    background-color: beige;
+    padding: 20px;
+    opacity: 0.8;
+    border-radius: 20px;
+}
