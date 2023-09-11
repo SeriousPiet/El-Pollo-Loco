@@ -13,12 +13,12 @@ class World {
   runInterval;
   camera_x = 0;
   IMAGES_DEADSCREEN = [
-    "../img/9_intro_outro_screens/game_over/oh no you lost!.png",
-    "../img/9_intro_outro_screens/game_over/you lost.png",
+    "./img/9_intro_outro_screens/game_over/oh no you lost!.png",
+    "./img/9_intro_outro_screens/game_over/you lost.png",
   ];
   IMAGES_WINSCREEN = [
-    "../img/9_intro_outro_screens/game_over/game over!.png",
-    "../img/9_intro_outro_screens/game_over/game over.png",
+    "./img/9_intro_outro_screens/game_over/game over!.png",
+    "./img/9_intro_outro_screens/game_over/game over.png",
   ];
 
   constructor(canvas) {
@@ -620,6 +620,7 @@ class World {
     document.getElementById("canvas").style.filter = "blur(5px)";
     document.getElementById("ingameButtons").style.display = "none";
     document.getElementById("endScreen").style.display = "flex";
+    console.log(this.character.energy);
     if (this.character.energy == 0) {
       this.generateDeadScreenPath();
     } else {
@@ -635,6 +636,7 @@ class World {
       Math.random() * this.IMAGES_DEADSCREEN.length
     );
     let deadScreenPath = '"' + this.IMAGES_DEADSCREEN[random_image] + '"';
+    console.log(deadScreenPath);
     document.getElementById("endScreen").style.backgroundImage =
       "url(" + deadScreenPath + ")";
   }
