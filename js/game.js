@@ -134,65 +134,73 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("toggleRight").addEventListener(
     "touchstart",
     (e) => {
+      event.preventDefault();
       keyboard.RIGHT = true;
     },
-    { passive: true }
+
   );
 
   document.getElementById("toggleRight").addEventListener(
     "touchend",
     (e) => {
+      event.preventDefault();
       keyboard.RIGHT = false;
     },
-    { passive: true }
+
   );
 
   document.getElementById("toggleLeft").addEventListener(
     "touchstart",
     (e) => {
+      event.preventDefault();
       keyboard.LEFT = true;
     },
-    { passive: true }
+
   );
 
   document.getElementById("toggleLeft").addEventListener(
     "touchend",
     (e) => {
+      event.preventDefault();
       keyboard.LEFT = false;
     },
-    { passive: true }
+
   );
 
   document.getElementById("toggleJump").addEventListener(
     "touchstart",
     (e) => {
+      event.preventDefault();
       keyboard.SPACE = true;
     },
-    { passive: true }
+
   );
 
   document.getElementById("toggleJump").addEventListener(
     "touchend",
     (e) => {
+      event.preventDefault();
       keyboard.SPACE = false;
     },
-    { passive: true }
+
   );
 
   document.getElementById("toggleDrop").addEventListener(
     "touchstart",
     (e) => {
+      event.preventDefault();
       keyboard.D = true;
     },
-    { passive: true }
+
   );
 
   document.getElementById("toggleDrop").addEventListener(
     "touchend",
     (e) => {
+      event.preventDefault();
       keyboard.D = false;
     },
-    { passive: true }
+
   );
 });
 
