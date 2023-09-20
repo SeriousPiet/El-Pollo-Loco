@@ -123,7 +123,11 @@ class Character extends MovableObject {
     if (this.canJump()) {
       this.jump(30);
     }
-    this.world.camera_x = -this.x + 100;
+    if (this.x > 0 && this.x <= 590) {
+      this.world.camera_x = 0;
+    } else {
+      this.world.camera_x = -this.x + 590;
+    }
   }
 
   /**
@@ -214,7 +218,9 @@ class Character extends MovableObject {
     if (!this.hasPlayedDeadSound) {
       this.dead_sound.play();
       this.hasPlayedDeadSound = true;
-      setTimeout(() => {this.world.returnToEndScreen()}, 1500);
+      setTimeout(() => {
+        this.world.returnToEndScreen();
+      }, 1500);
     }
     clearInterval(this.intervalID);
     if (this.isAboveGround(this.pepe)) {

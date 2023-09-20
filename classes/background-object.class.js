@@ -1,6 +1,7 @@
 class BackgroundObject extends MovableObject {
   width = 1280;
   height = 720;
+  speed = 10;
 
   IMAGES1 = [
     "img/5_background/layers/air.png",
@@ -17,7 +18,7 @@ class BackgroundObject extends MovableObject {
   ];
 
   constructor(imageIndex, x, arrayIndex) {
-    if ((arrayIndex == 1)) {
+    if (arrayIndex == 1) {
       super().loadImage(this.IMAGES1[imageIndex]);
     } else {
       super().loadImage(this.IMAGES2[imageIndex]);

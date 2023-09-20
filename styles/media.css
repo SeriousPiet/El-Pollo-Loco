@@ -1,29 +1,15 @@
 @media only screen and (max-width: 1280px) {
-  #canvas {
+  #canvas, #elements {
     width: 100%;
     min-width: 100%;
-    min-height: 100vh;
-  }
-
-  #elements {
-    width: 100%;
-    min-width: 100%;
-    min-height: 100vh;
-  }
-
-  #overlay {
-    max-height: 100vh;
-  }
-}
-
-@media only screen and (max-height: 720px) {
-  #canvas {
-    min-width: 100%;
-    min-height: 100vh;
     height: 100vh;
   }
 
-  #elements {
+
+}
+
+@media only screen and (max-height: 720px) {
+  #canvas, #elements {
     min-width: 100%;
     min-height: 100vh;
     height: 100vh;

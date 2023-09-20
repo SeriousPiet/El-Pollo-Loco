@@ -47,11 +47,9 @@ class World {
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
       this.ctx.translate(this.camera_x, 0);
       this.addObjectsToMap(this.level.backgroundObjects);
-      this.ctx.translate(-this.camera_x, 0);
-      this.addStatusBars();
-      this.ctx.translate(this.camera_x, 0);
       this.addMovableObjekts();
       this.ctx.translate(-this.camera_x, 0);
+      this.addStatusBars();
       let self = this;
       requestAnimationFrame(function () {
         self.draw();
@@ -453,6 +451,7 @@ class World {
    */ checkThrowObjects() {
     let bottle;
     if (
+      this.throwableObjects.length === 0 &&
       this.keyboard.D &&
       this.character.energy > 0 &&
       this.bottleStatusBar.percentage > 0

@@ -12,109 +12,12 @@ let arrayIndex = 0;
  * Description: Initializes the game level by generating Chicken and smallChicken objects,
  * as well as the Endboss, and setting up background objects for the level.
  */ function initLevel() {
-  /**
-   * Description: Generates a random number between the specified minimum and maximum values (inclusive).
-   * The function utilizes Math.floor() to round down the calculated number obtained by multiplying a random decimal
-   * with the range between min and max. The resulting value is then added to the minimum to fit within the desired range.
-   * This is used to obtain a random number within a specified range, such as generating the number of chickens in the game.
-   * @param {number} min The minimum value of the desired range.
-   * @param {number} max The maximum value of the desired range.
-   * @returns {number} A random number between min and max (inclusive).
-   */ function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  const chickenCount = getRandomInt(5, 10);
-  const smallChickenCount = getRandomInt(3, 5);
-  const salsaBottleCount = getRandomInt(5, 10);
-  const cloudsCount = getRandomInt(5, 10);
-  const coinsCount = getRandomInt(5, 10);
-
-  /**
-   * Description: Generates and initializes a specified number of Chicken objects in a loop.
-   * For each iteration of the loop, a new Chicken instance is created with a random X-coordinate
-   * within the canvas width. The generated Chicken objects are added to the chickenList array.
-   * @param {number} chickenCount The number of Chicken objects to generate.
-   * @returns {void} This function does not have a specific return value.
-   */ for (let i = 0; i < chickenCount; i++) {
-    const randomX = getRandomInt(1279, 3837);
-    const chicken = new Chicken(randomX);
-    chickenList.push(chicken);
-  }
-
-  /**
-   * Description: Generates and initializes a specified number of smallChicken objects in a loop.
-   * For each iteration of the loop, a new smallChicken instance is created with a random X-coordinate
-   * within the canvas width. The generated smallChicken objects are added to the chickenList array.
-   * @param {number} smallChickenCount The number of smallChicken objects to generate.
-   * @returns {void} This function does not have a specific return value.
-   */ for (let i = 0; i < smallChickenCount; i++) {
-    const randomX = getRandomInt(1279, 3837);
-    const smallChicken = new SmallChicken(randomX);
-    smallChickenList.push(smallChicken);
-  }
-
-  /**
-   * Description: Generates and initializes a specified number of salsaBottle objects in a loop.
-   * For each iteration of the loop, a new salsaBottle instance is created with a random X-coordinate
-   * within the canvas width. The generated salsaBottle objects are added to the chickenList array.
-   * @param {number} salsaBottleCount The number of salsaBottle objects to generate.
-   * @returns {void} This function does not have a specific return value.
-   */ for (let i = 0; i < salsaBottleCount; i++) {
-    const randomX = getRandomInt(1279, 5116);
-    const imageIndex = Math.floor(Math.random() * 2);
-    const salsaBottle = new SalsaBottle(imageIndex, randomX);
-    salsaBottleList.push(salsaBottle);
-  }
-
-  /**
-   * Description: Generates and initializes a specified number of cloud objects in a loop.
-   * For each iteration of the loop, a new cloud instance is created with a random X-coordinate
-   * within the canvas width. The generated cloud objects are added to the chickenList array.
-   * @param {number} cloudsCount The number of cloud objects to generate.
-   * @returns {void} This function does not have a specific return value.
-   */ for (let i = 0; i < cloudsCount; i++) {
-    const randomX = getRandomInt(1279, 5116);
-    const imageIndex = Math.floor(Math.random() * 2);
-    const clouds = new Cloud(imageIndex, randomX);
-    cloudsList.push(clouds);
-  }
-
-  /**
-   * Description: Generates and initializes a specified number of coin objects in a loop.
-   * For each iteration of the loop, a new coin instance is created with a random X-coordinate
-   * For each iteration of the loop, a new coin instance is created with a random Y-coordinate
-   * within the canvas width. The generated coin objects are added to the chickenList array.
-   * @param {number} coinsCount The number of coin objects to generate.
-   * @returns {void} This function does not have a specific return value.
-   */ for (let i = 0; i < coinsCount; i++) {
-    const randomX = getRandomInt(1279, 5116);
-    const randomY = getRandomInt(200, 400);
-    const coins = new Coin(randomY, randomX);
-    coinsList.push(coins);
-  }
-
-  /**
-   * Discription: Generates a sequence of background objects based on specified conditions.
-   * This function iterates through a loop with two nested loops and creates
-   * instances of the BackgroundObject class. The loop structure ensures that
-   * background objects are created based on the values of 'i' and 'k', and the
-   * 'arrayIndex' variable is determined by whether 'i' is even or odd.
-   * @param {Array} backgroundList - An array where generated BackgroundObject instances are stored.
-   */ for (let i = 0; i < 5; i++) {
-    if (i % 2 === 0) {
-      arrayIndex = 0;
-    } else {
-      arrayIndex = 1;
-    }
-    for (let k = 0; k < 4; k++) {
-      const backgroundImage = new BackgroundObject(k, i, arrayIndex);
-      backgroundList.push(backgroundImage);
-    }
-  }
-
-  const boss = new Endboss();
-  bossList.push(boss);
+  spawnChicken();
+  spawnSmallChicken();
+  spawnSalsaBottle();
+  spawnClouds();
+  spawnCoins();
+  spawnEndboss();
 
   level1 = new Level(
     smallChickenList,
@@ -125,6 +28,122 @@ let arrayIndex = 0;
     coinsList,
     backgroundList
   );
+}
+
+/**
+ * Description: Generates a random number between the specified minimum and maximum values (inclusive).
+ * The function utilizes Math.floor() to round down the calculated number obtained by multiplying a random decimal
+ * with the range between min and max. The resulting value is then added to the minimum to fit within the desired range.
+ * This is used to obtain a random number within a specified range, such as generating the number of chickens in the game.
+ * @param {number} min The minimum value of the desired range.
+ * @param {number} max The maximum value of the desired range.
+ * @returns {number} A random number between min and max (inclusive).
+ */ function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * Description: Generates and initializes a specified number of Chicken objects in a loop.
+ * For each iteration of the loop, a new Chicken instance is created with a random X-coordinate
+ * within the canvas width. The generated Chicken objects are added to the chickenList array.
+ * @param {number} chickenCount The number of Chicken objects to generate.
+ * @returns {void} This function does not have a specific return value.
+ */ function spawnChicken() {
+  const chickenCount = getRandomInt(5, 10);
+  for (let i = 0; i < chickenCount; i++) {
+    const randomX = getRandomInt(1279, 3837);
+    const chicken = new Chicken(randomX);
+    chickenList.push(chicken);
+  }
+}
+/**
+ * Description: Generates and initializes a specified number of smallChicken objects in a loop.
+ * For each iteration of the loop, a new smallChicken instance is created with a random X-coordinate
+ * within the canvas width. The generated smallChicken objects are added to the chickenList array.
+ * @param {number} smallChickenCount The number of smallChicken objects to generate.
+ * @returns {void} This function does not have a specific return value.
+ */ function spawnSmallChicken() {
+  const smallChickenCount = getRandomInt(3, 5);
+  for (let i = 0; i < smallChickenCount; i++) {
+    const randomX = getRandomInt(1279, 3837);
+    const smallChicken = new SmallChicken(randomX);
+    smallChickenList.push(smallChicken);
+  }
+}
+
+/**
+ * Description: Generates and initializes a specified number of salsaBottle objects in a loop.
+ * For each iteration of the loop, a new salsaBottle instance is created with a random X-coordinate
+ * within the canvas width. The generated salsaBottle objects are added to the chickenList array.
+ * @param {number} salsaBottleCount The number of salsaBottle objects to generate.
+ * @returns {void} This function does not have a specific return value.
+ */ function spawnSalsaBottle() {
+  const salsaBottleCount = getRandomInt(5, 10);
+  for (let i = 0; i < salsaBottleCount; i++) {
+    const randomX = getRandomInt(1279, 5116);
+    const imageIndex = Math.floor(Math.random() * 2);
+    const salsaBottle = new SalsaBottle(imageIndex, randomX);
+    salsaBottleList.push(salsaBottle);
+  }
+}
+
+/**
+ * Description: Generates and initializes a specified number of cloud objects in a loop.
+ * For each iteration of the loop, a new cloud instance is created with a random X-coordinate
+ * within the canvas width. The generated cloud objects are added to the chickenList array.
+ * @param {number} cloudsCount The number of cloud objects to generate.
+ * @returns {void} This function does not have a specific return value.
+ */ function spawnClouds() {
+  const cloudsCount = getRandomInt(5, 10);
+  for (let i = 0; i < cloudsCount; i++) {
+    const randomX = getRandomInt(1279, 5116);
+    const imageIndex = Math.floor(Math.random() * 2);
+    const clouds = new Cloud(imageIndex, randomX);
+    cloudsList.push(clouds);
+  }
+}
+
+/**
+ * Description: Generates and initializes a specified number of coin objects in a loop.
+ * For each iteration of the loop, a new coin instance is created with a random X-coordinate
+ * For each iteration of the loop, a new coin instance is created with a random Y-coordinate
+ * within the canvas width. The generated coin objects are added to the chickenList array.
+ * @param {number} coinsCount The number of coin objects to generate.
+ * @returns {void} This function does not have a specific return value.
+ */ function spawnCoins() {
+  const coinsCount = getRandomInt(5, 10);
+  for (let i = 0; i < coinsCount; i++) {
+    const randomX = getRandomInt(1279, 5116);
+    const randomY = getRandomInt(200, 400);
+    const coins = new Coin(randomY, randomX);
+    coinsList.push(coins);
+  }
+}
+
+/**
+ * This function creates a new Endboss object and adds it to the bossList array.
+ */ function spawnEndboss() {
+  const boss = new Endboss();
+  bossList.push(boss);
+}
+
+/**
+ * Discription: Generates a sequence of background objects based on specified conditions.
+ * This function iterates through a loop with two nested loops and creates
+ * instances of the BackgroundObject class. The loop structure ensures that
+ * background objects are created based on the values of 'i' and 'k', and the
+ * 'arrayIndex' variable is determined by whether 'i' is even or odd.
+ * @param {Array} backgroundList - An array where generated BackgroundObject instances are stored.
+ */ for (let i = 0; i < 5; i++) {
+  if (i % 2 === 0) {
+    arrayIndex = 0;
+  } else {
+    arrayIndex = 1;
+  }
+  for (let k = 0; k < 4; k++) {
+    const backgroundImage = new BackgroundObject(k, i, arrayIndex);
+    backgroundList.push(backgroundImage);
+  }
 }
 
 /**
